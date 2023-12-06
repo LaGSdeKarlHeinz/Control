@@ -17,7 +17,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="assets.qrc">
+   <iconset>
     <normaloff>:/assets/Nordend_logo.png</normaloff>:/assets/Nordend_logo.png</iconset>
   </property>
   <property name="styleSheet">
@@ -2249,7 +2249,7 @@ border: 3px  solid red;
      <rect>
       <x>20</x>
       <y>730</y>
-      <width>811</width>
+      <width>971</width>
       <height>121</height>
      </rect>
     </property>
@@ -2707,7 +2707,7 @@ color: black;
     <widget class="QLabel" name="label_8">
      <property name="geometry">
       <rect>
-       <x>730</x>
+       <x>890</x>
        <y>30</y>
        <width>61</width>
        <height>31</height>
@@ -2725,7 +2725,7 @@ font: 9pt &quot;Verdana&quot;;
     <widget class="QLabel" name="label_9">
      <property name="geometry">
       <rect>
-       <x>730</x>
+       <x>890</x>
        <y>70</y>
        <width>61</width>
        <height>31</height>
@@ -2738,6 +2738,134 @@ font: 9pt &quot;Verdana&quot;;
      </property>
      <property name="text">
       <string>INACTIVE</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="cmd_new_valve1_active">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>30</y>
+       <width>81</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+color: white;
+font: 9pt &quot;Verdana&quot;;
+border-radius: 10px;
+border: 2px  solid rgb(8, 222, 10);;
+}
+QPushButton:hover {
+font: 700 9pt &quot;Verdana&quot;;
+}
+QPushButton:pressed {
+font: 700 9pt &quot;Verdana&quot;;
+background: rgb(8, 222, 10);;
+color: black;
+}</string>
+     </property>
+     <property name="text">
+      <string>new_valve1</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="cmd_new_valve2_active">
+     <property name="geometry">
+      <rect>
+       <x>800</x>
+       <y>30</y>
+       <width>81</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+color: white;
+font: 9pt &quot;Verdana&quot;;
+border-radius: 10px;
+border: 2px  solid rgb(8, 222, 10);;
+}
+QPushButton:hover {
+font: 700 9pt &quot;Verdana&quot;;
+}
+QPushButton:pressed {
+font: 700 9pt &quot;Verdana&quot;;
+background: rgb(8, 222, 10);;
+color: black;
+}</string>
+     </property>
+     <property name="text">
+      <string>new_valve2</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="cmd_new_valve_2_inactive">
+     <property name="geometry">
+      <rect>
+       <x>800</x>
+       <y>70</y>
+       <width>81</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+color: white;
+font: 9pt &quot;Verdana&quot;;
+border-radius: 10px;
+border: 2px  solid red;
+}
+QPushButton:hover {
+font: 700 9pt &quot;Verdana&quot;;
+}
+QPushButton:pressed {
+font: 700 9pt &quot;Verdana&quot;;
+background: red;
+color: black;
+}</string>
+     </property>
+     <property name="text">
+      <string>new_valve2</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="cmd_new_valve1_inactive">
+     <property name="geometry">
+      <rect>
+       <x>710</x>
+       <y>70</y>
+       <width>81</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+color: white;
+font: 9pt &quot;Verdana&quot;;
+border-radius: 10px;
+border: 2px  solid red;
+}
+QPushButton:hover {
+font: 700 9pt &quot;Verdana&quot;;
+}
+QPushButton:pressed {
+font: 700 9pt &quot;Verdana&quot;;
+background: red;
+color: black;
+}</string>
+     </property>
+     <property name="text">
+      <string>new_valve1</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
     </widget>
    </widget>
@@ -2995,8 +3123,8 @@ font: 9pt &quot;Verdana&quot;;
    <widget class="QPushButton" name="reset_traj_button">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>750</y>
+      <x>1050</x>
+      <y>730</y>
       <width>141</width>
       <height>30</height>
      </rect>
@@ -3031,10 +3159,10 @@ border: none;
    <widget class="QLabel" name="label_14">
     <property name="geometry">
      <rect>
-      <x>1020</x>
-      <y>730</y>
-      <width>161</width>
-      <height>141</height>
+      <x>1050</x>
+      <y>770</y>
+      <width>141</width>
+      <height>111</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -3075,14 +3203,14 @@ border: none;
      <x>0</x>
      <y>0</y>
      <width>1211</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="assets.qrc"/>
+  <include location="GS2023.ui"/>
  </resources>
  <connections/>
 </ui>
