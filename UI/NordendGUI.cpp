@@ -642,18 +642,20 @@ void NordendGUI::on_GSE_vent_pressed() {
 //////////////////////////////////////////////
 // Full manual cmd
 
-void NordendGUI::on_cmd_new_valve2_active_pressed() {
-    std::cout << "test" << std::endl;
-}
-void NordendGUI::on_cmd_new_valve2_active_inactive() {
-    std::cout << "test" << std::endl;
-}
-
-void NordendGUI::on_cmd_new_valve1_active_pressed() {
+void NordendGUI::on_cmd_active_new_valve1_pressed() {
     std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
 }
-void NordendGUI::on_cmd_new_valve1_active_inactive() {
-    std::cout << "test" << std::endl;
+
+void NordendGUI::on_cmd_inactive_new_valve1_pressed() {
+    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+}
+
+void NordendGUI::on_cmd_active_new_valve2_pressed() {
+    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+}
+
+void NordendGUI::on_cmd_inactive_new_valve2_pressed() {
+    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
 }
 
 void NordendGUI::on_cmd_active_pressurization_pressed() {
