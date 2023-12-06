@@ -70,7 +70,12 @@ public slots:
     void on_AV_vent_fuel_pressed();
     void on_AV_pressurization_pressed();
 
+
+    void on_cmd_new_valve2_active_pressed();
+    void on_cmd_new_valve2_active_inactive();
     void on_cmd_new_valve1_active_pressed();
+    void on_cmd_new_valve1_active_inactive();
+
 
     void serialError();
 
