@@ -2740,7 +2740,7 @@ font: 9pt &quot;Verdana&quot;;
       <string>INACTIVE</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="cmd_new_valve1_active">
+    <widget class="QPushButton" name="cmd_active_new_valve1">
      <property name="geometry">
       <rect>
        <x>710</x>
@@ -2772,7 +2772,7 @@ color: black;
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="cmd_new_valve2_active">
+    <widget class="QPushButton" name="cmd_active_new_valve2">
      <property name="geometry">
       <rect>
        <x>800</x>
@@ -2804,7 +2804,7 @@ color: black;
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="cmd_new_valve_2_inactive">
+    <widget class="QPushButton" name="cmd_inactive_new_valve2">
      <property name="geometry">
       <rect>
        <x>800</x>
@@ -2836,7 +2836,7 @@ color: black;
       <bool>false</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="cmd_new_valve1_inactive">
+    <widget class="QPushButton" name="cmd_inactive_new_valve1">
      <property name="geometry">
       <rect>
        <x>710</x>
