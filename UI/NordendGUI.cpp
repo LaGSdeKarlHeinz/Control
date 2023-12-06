@@ -641,6 +641,10 @@ void NordendGUI::on_GSE_vent_pressed() {
 
 //////////////////////////////////////////////
 // Full manual cmd
+void NordendGUI::on_cmd_new_valve1_active_pressed() {
+    std::cout << "AAAAAAAAAAAAAAAAAAAAAAAAAA" << std::endl;
+} 
+
 
 void NordendGUI::on_cmd_active_pressurization_pressed() {
     send_cmd(CMD_ID::AV_CMD_MAN_PRESSURE, ACTIVE, ui->AV_pressurization);
