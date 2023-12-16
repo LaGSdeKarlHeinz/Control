@@ -8,7 +8,8 @@
  */
 
 #include "NordendGUI.h"
-#include <ui_GS2023.h>
+// #include <ui_GS2023.h>
+#include <ui_Firehorn.h>
 #include <iostream>
 #include <QTimer>
 #include <QGraphicsColorizeEffect>
@@ -92,21 +93,21 @@ void NordendGUI::handleSerialRxPacket(uint8_t packetId, uint8_t *dataIn, uint32_
             ui->AV_packet_nbr->setText(QString::number(packetAV_downlink.packet_nbr));
 
             // Set the valves states
-            set_valve_img(ui->AV_servo_N2O, packetAV_downlink.engine_state.servo_N2O+10);
-            set_valve_img(ui->AV_servo_fuel, packetAV_downlink.engine_state.servo_fuel+10);
-            set_valve_img(ui->AV_vent_N2O, packetAV_downlink.engine_state.vent_N2O+10, true, true);
+            set_valve_img(ui->AV_servo_N2O, packetAV_downlink.engine_state.main_LOX+10);
+            set_valve_img(ui->AV_servo_fuel, packetAV_downlink.engine_state.main_fuel+10);
+            set_valve_img(ui->AV_vent_N2O, packetAV_downlink.engine_state.vent_LOX+10, true, true);
             set_valve_img(ui->AV_vent_fuel, packetAV_downlink.engine_state.vent_fuel+10, true, true);
-            set_valve_img(ui->AV_pressurization, packetAV_downlink.engine_state.pressurize+10, false, true);
-            set_valve_light(ui->N2O_servo_light, packetAV_downlink.engine_state.servo_N2O);
-            set_valve_light(ui->fuel_servo_light, packetAV_downlink.engine_state.servo_fuel);
-            set_valve_light(ui->N2O_vent_light, packetAV_downlink.engine_state.vent_N2O);
+            set_valve_img(ui->AV_pressurization, packetAV_downlink.engine_state.pressurant_fuel+10, false, true);
+            set_valve_light(ui->N2O_servo_light, packetAV_downlink.engine_state.main_LOX);
+            set_valve_light(ui->fuel_servo_light, packetAV_downlink.engine_state.main_fuel);
+            set_valve_light(ui->N2O_vent_light, packetAV_downlink.engine_state.vent_LOX);
             set_valve_light(ui->fuel_vent_light, packetAV_downlink.engine_state.vent_fuel);
-            set_valve_light(ui->pressurize_light, packetAV_downlink.engine_state.pressurize);
+            set_valve_light(ui->pressurize_light, packetAV_downlink.engine_state.pressurant_fuel);
 
             // Set telemetry data box
-            ui->N2O_pressure->setText(QString::number(packetAV_downlink.N2O_pressure, 'f', 2) + " bar");
-            ui->N2O_pressure->setStyleSheet(((packetAV_downlink.N2O_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
-            ui->N2O_temp->setText(QString::number(packetAV_downlink.tank_temp, 'f', 2) + " °C");
+            ui->N2O_pressure->setText(QString::number(packetAV_downlink.LOX_pressure, 'f', 2) + " bar");
+            ui->N2O_pressure->setStyleSheet(((packetAV_downlink.LOX_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+            ui->N2O_temp->setText(QString::number(packetAV_downlink.fuel_level, 'f', 2) + " °C");
             ui->fuel_pressure->setText(QString::number(packetAV_downlink.fuel_pressure, 'f', 2) + " bar");
             ui->fuel_pressure->setStyleSheet(((packetAV_downlink.fuel_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
             ui->chamber_pressure->setText(QString::number(packetAV_downlink.chamber_pressure, 'f', 2) + " bar");
@@ -183,7 +184,11 @@ void NordendGUI::handleSerialRxPacket(uint8_t packetId, uint8_t *dataIn, uint32_
             set_valve_light(ui->GSE_vent_light, packetGSE_downlink.status.vent==ACTIVE);
             if (packetGSE_downlink.disconnectActive) { // for 20sec
                 ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/assets/Prop_background_disconnect.png);qproperty-iconSize: 700px;}");
+                // ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/images/prop_diagram_firehorn.png);qproperty-iconSize: 700px;}");
+
             } else {
+                // ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/images/prop_diagram_firehorn.png);qproperty-iconSize: 700px;}");
+
                 ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/assets/Prop_background_V1.png);qproperty-iconSize: 700px;}");
             }
 
@@ -215,7 +220,7 @@ void NordendGUI::handleSerialRxPacket(uint8_t packetId, uint8_t *dataIn, uint32_
             ui->GSE_pressure->setText(QString::number(packetGSE_downlink.tankPressure, 'f', 2) + " bar");
             ui->GSE_temp->setText(QString::number(packetGSE_downlink.tankTemperature, 'f', 2) + " °C");
             ui->filling_pressure->setText(QString::number(packetGSE_downlink.fillingPressure, 'f', 2) + " bar");
-            ui->safe_config_label->setVisible(packetGSE_downlink.status.vent == INACTIVE && packetGSE_downlink.status.fillingN2O == INACTIVE && (((FLIGHTMODE)packetAV_downlink.av_state == FLIGHTMODE::DESCENT_MODE)?packetAV_downlink.engine_state.pressurize:!packetAV_downlink.engine_state.pressurize) && !packetAV_downlink.engine_state.vent_fuel && !packetAV_downlink.engine_state.vent_N2O && !packetAV_downlink.engine_state.servo_fuel && !packetAV_downlink.engine_state.servo_N2O);
+            ui->safe_config_label->setVisible(packetGSE_downlink.status.vent == INACTIVE && packetGSE_downlink.status.fillingN2O == INACTIVE && (((FLIGHTMODE)packetAV_downlink.av_state == FLIGHTMODE::DESCENT)?packetAV_downlink.engine_state.pressurant_fuel:!packetAV_downlink.engine_state.pressurant_LOX) && !packetAV_downlink.engine_state.vent_fuel && !packetAV_downlink.engine_state.vent_LOX && !packetAV_downlink.engine_state.main_fuel && !packetAV_downlink.engine_state.main_LOX);
             
             ui->load_cell->setText(QString::number(packetGSE_downlink.loadcellRaw));
             ui->load_cell_tare->setText(QString::number(packetGSE_downlink.loadcellRaw - tare_val));
@@ -238,7 +243,7 @@ void NordendGUI::on_arm_cmd_pressed() {
 //    QMessageBox::StandardButton reply = QMessageBox::question(this,"ARM MODE","Arm mode confirmation request", QMessageBox::Yes | QMessageBox::No);
 //    if (reply == QMessageBox::Yes) {
         av_uplink_t p;
-        p.prefix = ERT_PREFIX;
+        
         p.order_id = CMD_ID::AV_CMD_ARM;
         p.order_value = ACTIVE;
         sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
@@ -249,7 +254,7 @@ void NordendGUI::on_arm_cmd_pressed() {
 
 void NordendGUI::on_disarm_cmd_pressed() {
     av_uplink_t p;
-    p.prefix = ERT_PREFIX;
+    
     p.order_id = CMD_ID::AV_CMD_ARM;
     p.order_value = INACTIVE;
     sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
@@ -257,7 +262,7 @@ void NordendGUI::on_disarm_cmd_pressed() {
 
 void NordendGUI::on_abort_cmd_pressed() {
     av_uplink_t p;
-    p.prefix = ERT_PREFIX;
+    
     p.order_id = CMD_ID::AV_CMD_ABORT;
     p.order_value = ACTIVE;
     sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
@@ -265,18 +270,18 @@ void NordendGUI::on_abort_cmd_pressed() {
 
 void NordendGUI::on_recover_cmd_pressed() {
     av_uplink_t p;
-    p.prefix = ERT_PREFIX;
+    
     p.order_id = CMD_ID::AV_CMD_RECOVER;
     p.order_value = ACTIVE;
     sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
 }
 
 void NordendGUI::on_ignition_cmd_pressed() {
-    if ((FLIGHTMODE) packetAV_downlink.av_state == FLIGHTMODE::PRESSURED_MODE) {
+    if ((FLIGHTMODE) packetAV_downlink.av_state == FLIGHTMODE::ARMED) {
         QMessageBox::StandardButton reply = QMessageBox::question(this,"IGNITION","Ignition confirmation request", QMessageBox::Yes | QMessageBox::No);
         if (reply == QMessageBox::Yes) {
             av_uplink_t p;
-            p.prefix = ERT_PREFIX;
+            
             p.order_id = CMD_ID::AV_CMD_IGNITION;
             p.order_value = IGNITION_CODE;
             sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
@@ -295,7 +300,7 @@ void NordendGUI::on_disconnect_cmd_pressed() {
     QMessageBox::StandardButton reply = QMessageBox::question(this,"DISCONNECT","GSE Disconnect confirmation request", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         av_uplink_t p;
-        p.prefix = ERT_PREFIX;
+        
         p.order_id = CMD_ID::GSE_CMD_DISCONNECT;
         p.order_value = ACTIVE;
         sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
@@ -305,13 +310,13 @@ void NordendGUI::on_disconnect_cmd_pressed() {
 }
 
 void NordendGUI::on_pressurization_cmd_pressed() {
-    if ((FLIGHTMODE) packetAV_downlink.av_state == FLIGHTMODE::ARMED_MODE) {
+    if ((FLIGHTMODE) packetAV_downlink.av_state == FLIGHTMODE::ARMED) {
         av_uplink_t p;
-        p.prefix = ERT_PREFIX;
+        
         p.order_id = CMD_ID::AV_CMD_PRESSURIZE;
         sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
     } else {
-        showInfoMessage("Pressurization cmd rejected, AV not in ARMED_MODE");
+        showInfoMessage("Pressurization cmd rejected, AV not in ARMED");
     }
 }
 
@@ -394,7 +399,7 @@ void NordendGUI::sendSerialPacket(uint8_t packetId, uint8_t *packet, uint32_t si
 
 void NordendGUI::send_cmd(uint8_t order_id, uint8_t order_value, QPushButton *button) {
     av_uplink_t p;
-    p.prefix = ERT_PREFIX;
+    
     p.order_id = order_id;
     p.order_value = order_value;
     sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
@@ -479,57 +484,42 @@ void NordendGUI::update_AV_states(FLIGHTMODE state) {
     last_state->setStyleSheet("color: green");
     last_state->setText("X");
     switch (state) {
-        case INITIALIZE_MODE:
+        case FLIGHTMODE::INIT:
             set_AV_state(ui->st_init);
-            std::cout << "INITIALIZE_MODE: Wait for arming or calibration" << std::endl;
+            std::cout << "INIT: Wait for arming or calibration" << std::endl;
             break;
-        case READYSTEADY_MODE:
+        case FLIGHTMODE::READY_STEADY:
             set_AV_state(ui->st_ready_steady);
-            std::cout << "READYSTEADY_MODE: GPS ready, Wait for arming or calibration" << std::endl;
+            std::cout << "READY_STEADY: GPS ready, Wait for arming or calibration" << std::endl;
             break;
-        case CALIBRATION_MODE:
+        case FLIGHTMODE::CALIBRATION:
             set_AV_state(ui->st_calibration);
-            std::cout << "CALIBRATION_MODE: Calibrate sensors and actuators" << std::endl;
+            std::cout << "CALIBRATION: Calibrate sensors and actuators" << std::endl;
             break;
-        case MANUAL_MODE:
+        case FLIGHTMODE::MANUAL:
             set_AV_state(ui->st_manual_operation);
             std::cout << "MANUAL_MODE: Manual Servo movement" << std::endl;
             break;
-        case ARMED_MODE:
+        case FLIGHTMODE::ARMED:
             set_AV_state(ui->st_armed);
-            std::cout << "ARMED_MODE: System is armed and ready to pressure" << std::endl;
+            std::cout << "ARMED: System is armed and ready to pressure" << std::endl;
             break;
-        case PRESSURED_MODE:
-            set_AV_state(ui->st_pressured);
-            std::cout << "PRESSURED_MODE: System is pressured" << std::endl;
-            break;
-        case IGNITER_MODE:
+        case FLIGHTMODE::THRUST_SEQUENCE:
             set_AV_state(ui->st_fire_igniter);
-            std::cout << "IGNITER_MODE: Fire igniter" << std::endl;
+            std::cout << "THRUST_SEQUENCE: Thrust sequence ongoing" << std::endl;
             break;
-        case IGNITION_MODE:
-            set_AV_state(ui->st_ignition);
-            std::cout << "IGNITION_MODE: Partially open valves" << std::endl;
-            break;
-        case THRUST_MODE:
-            set_AV_state(ui->st_thrust);
-            std::cout << "THRUST_MODE: Fully open valves" << std::endl;
-            break;
-        case SHUTDOWN_MODE:
+        case FLIGHTMODE::ASCENT:
             set_AV_state(ui->st_shutdown);
-            std::cout << "SHUTDOWN_MODE: Close ethanol valve" << std::endl;
+            std::cout << "ASCENT: rocket is ascending" << std::endl;
             break;
-        case GLIDING_MODE:
-            set_AV_state(ui->st_glide);
-            std::cout << "GLIDING_MODE: Glide" << std::endl;
-            break;
-        case DESCENT_MODE:
+    
+        case FLIGHTMODE::DESCENT:
             set_AV_state(ui->st_descent);
-            std::cout << "DESCENT_MODE: Descent" << std::endl;
+            std::cout << "DESCENT: Descent" << std::endl;
             break;
-        case ABORT_MODE:
+        case FLIGHTMODE::ERROR_FLIGHT:
             set_AV_state(ui->st_abort);
-            std::cout << "ABORT_MODE: User triggered abort" << std::endl;
+            std::cout << "ERROR_FLIGHT: Flight error encountered" << std::endl;
             break;
         default:
             std::cout << "Unknown state" << std::endl;
@@ -611,15 +601,15 @@ void NordendGUI::on_debug_button_pressed() {
 // Valve clicked
 
 void NordendGUI::on_AV_servo_N2O_pressed() {
-    send_cmd(CMD_ID::AV_CMD_SERVO_N2O, (packetAV_downlink.engine_state.servo_N2O)?INACTIVE:ACTIVE, ui->AV_servo_N2O);
+    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, (packetAV_downlink.engine_state.main_LOX)?INACTIVE:ACTIVE, ui->AV_servo_N2O);
 }
 
 void NordendGUI::on_AV_servo_fuel_pressed() {
-    send_cmd(CMD_ID::AV_CMD_SERVO_FUEL, (packetAV_downlink.engine_state.servo_fuel)?INACTIVE:ACTIVE, ui->AV_servo_fuel);
+    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, (packetAV_downlink.engine_state.main_fuel)?INACTIVE:ACTIVE, ui->AV_servo_fuel);
 }
 
 void NordendGUI::on_AV_vent_N2O_pressed() {
-    send_cmd(CMD_ID::AV_CMD_VENT_N2O, (packetAV_downlink.engine_state.vent_N2O)?INACTIVE:ACTIVE, ui->AV_vent_N2O);
+    send_cmd(CMD_ID::AV_CMD_VENT_LOX, (packetAV_downlink.engine_state.vent_LOX)?INACTIVE:ACTIVE, ui->AV_vent_N2O);
 }
 
 void NordendGUI::on_AV_vent_fuel_pressed() {
@@ -627,12 +617,13 @@ void NordendGUI::on_AV_vent_fuel_pressed() {
 }
 
 void NordendGUI::on_AV_pressurization_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAN_PRESSURE, (packetAV_downlink.engine_state.pressurize)?INACTIVE:ACTIVE, ui->AV_pressurization);
+    send_cmd(CMD_ID::AV_CMD_PRES_FUEL, (packetAV_downlink.engine_state.pressurant_fuel)?INACTIVE:ACTIVE, ui->AV_pressurization);
+    send_cmd(CMD_ID::AV_CMD_PRES_LOX, (packetAV_downlink.engine_state.pressurant_LOX)?INACTIVE:ACTIVE, ui->AV_pressurization);
 }
 
 
 void NordendGUI::on_GSE_fill_pressed() {
-    send_cmd(CMD_ID::GSE_CMD_FILLING_N2O, (packetGSE_downlink.status.fillingN2O == ACTIVE)?INACTIVE:ACTIVE, ui->GSE_fill);
+    send_cmd(CMD_ID::GSE_CMD_FILLING_LOX, (packetGSE_downlink.status.fillingN2O == ACTIVE)?INACTIVE:ACTIVE, ui->GSE_fill);
 }
 
 void NordendGUI::on_GSE_vent_pressed() {
@@ -659,35 +650,35 @@ void NordendGUI::on_cmd_inactive_new_valve2_pressed() {
 }
 
 void NordendGUI::on_cmd_active_pressurization_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAN_PRESSURE, ACTIVE, ui->AV_pressurization);
+    //send_cmd(CMD_ID::AV_CMD_MAN_PRESSURE, ACTIVE, ui->AV_pressurization);
 }
 
 void NordendGUI::on_cmd_inactive_pressurization_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAN_PRESSURE, INACTIVE, ui->AV_pressurization);
+    //send_cmd(CMD_ID::AV_CMD_MAN_PRESSURE, INACTIVE, ui->AV_pressurization);
 }
 
 void NordendGUI::on_cmd_active_N2O_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_SERVO_N2O, ACTIVE, ui->AV_servo_N2O);
+    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, ACTIVE, ui->AV_servo_N2O);
 }
 
 void NordendGUI::on_cmd_inactive_N2O_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_SERVO_N2O, INACTIVE, ui->AV_servo_N2O);
+    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, INACTIVE, ui->AV_servo_N2O);
 }
 
 void NordendGUI::on_cmd_active_fuel_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_SERVO_FUEL, ACTIVE, ui->AV_servo_fuel);
+    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, ACTIVE, ui->AV_servo_fuel);
 }
 
 void NordendGUI::on_cmd_inactive_fuel_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_SERVO_FUEL, INACTIVE, ui->AV_servo_fuel);
+    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, INACTIVE, ui->AV_servo_fuel);
 }
 
 void NordendGUI::on_cmd_active_N2O_vent_pressed() {
-    send_cmd(CMD_ID::AV_CMD_VENT_N2O, ACTIVE, ui->AV_vent_N2O);
+    send_cmd(CMD_ID::AV_CMD_VENT_LOX, ACTIVE, ui->AV_vent_N2O);
 }
 
 void NordendGUI::on_cmd_inactive_N2O_vent_pressed() {
-    send_cmd(CMD_ID::AV_CMD_VENT_N2O, INACTIVE, ui->AV_vent_N2O);
+    send_cmd(CMD_ID::AV_CMD_VENT_LOX, INACTIVE, ui->AV_vent_N2O);
 }
 
 void NordendGUI::on_cmd_active_fuel_vent_pressed() {
@@ -699,11 +690,11 @@ void NordendGUI::on_cmd_inactive_fuel_vent_pressed() {
 }
 
 void NordendGUI::on_cmd_active_N2O_fill_pressed() {
-    send_cmd(CMD_ID::GSE_CMD_FILLING_N2O, ACTIVE, ui->GSE_fill);
+    send_cmd(CMD_ID::GSE_CMD_FILLING_LOX, ACTIVE, ui->GSE_fill);
 }
 
 void NordendGUI::on_cmd_inactive_N2O_fill_pressed() {
-    send_cmd(CMD_ID::GSE_CMD_FILLING_N2O, INACTIVE, ui->GSE_fill);
+    send_cmd(CMD_ID::GSE_CMD_FILLING_LOX, INACTIVE, ui->GSE_fill);
 }
 
 void NordendGUI::on_cmd_active_GSE_vent_pressed() {
@@ -726,6 +717,7 @@ void NordendGUI::on_reset_valves_pressed() {
     set_valve_img(ui->AV_servo_fuel, UNKNOWN);
     set_valve_img(ui->AV_pressurization, UNKNOWN);
     ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/assets/Prop_background_V1.png);qproperty-iconSize: 700px;}");
+    // ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/images/prop_diagram_firehorn.png);qproperty-iconSize: 700px;}");
 
     ui->N2O_pressure->setText("0 bar");
     ui->N2O_temp->setText("0 °C");
@@ -838,6 +830,8 @@ void NordendGUI::logAVTelemetryPacket(const av_downlink_t* packet) {
     }
 
     // Print the telemetry data to the file
+    // TODO : refaire les logs
+    /*
     logFile << std::fixed << std::setprecision(6)
             << packet->packet_nbr << ", " << packet->timestamp << ", "
             << packet->gnss_lon << ", " << packet->gnss_lat << ", " << packet->gnss_alt << ", "
@@ -849,7 +843,7 @@ void NordendGUI::logAVTelemetryPacket(const av_downlink_t* packet) {
             << +packet->engine_state.vent_fuel << ", " << +packet->engine_state.pressurize << ", "
             << +packet->engine_state.purge << ", " << +packet->engine_state.reserve << ", "
             << +packet->gnss_choice << std::endl;
-
+    */
     // Close the file (automatic when logFile goes out of scope)
 }
 
