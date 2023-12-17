@@ -93,25 +93,42 @@ void NordendGUI::handleSerialRxPacket(uint8_t packetId, uint8_t *dataIn, uint32_
             ui->AV_packet_nbr->setText(QString::number(packetAV_downlink.packet_nbr));
 
             // Set the valves states
-            set_valve_img(ui->AV_servo_N2O, packetAV_downlink.engine_state.main_LOX+10);
-            set_valve_img(ui->AV_servo_fuel, packetAV_downlink.engine_state.main_fuel+10);
-            set_valve_img(ui->AV_vent_N2O, packetAV_downlink.engine_state.vent_LOX+10, true, true);
+            set_valve_img(ui->AV_main_LOX, packetAV_downlink.engine_state.main_LOX+10);
+            set_valve_img(ui->AV_main_fuel, packetAV_downlink.engine_state.main_fuel+10);
+            set_valve_img(ui->AV_vent_LOX, packetAV_downlink.engine_state.vent_LOX+10, true, true);
             set_valve_img(ui->AV_vent_fuel, packetAV_downlink.engine_state.vent_fuel+10, true, true);
-            set_valve_img(ui->AV_pressurization, packetAV_downlink.engine_state.pressurant_fuel+10, false, true);
+            // set_valve_img(ui->AV_pressurization, packetAV_downlink.engine_state.pressurant_fuel+10, false, true);
+            set_valve_img(ui->AV_pressurant_LOX, packetAV_downlink.engine_state.pressurant_LOX+10, true, true);
+            set_valve_img(ui->AV_pressurant_fuel, packetAV_downlink.engine_state.pressurant_fuel+10, true, true);
             set_valve_light(ui->N2O_servo_light, packetAV_downlink.engine_state.main_LOX);
             set_valve_light(ui->fuel_servo_light, packetAV_downlink.engine_state.main_fuel);
-            set_valve_light(ui->N2O_vent_light, packetAV_downlink.engine_state.vent_LOX);
+            set_valve_light(ui->LOX_vent_light, packetAV_downlink.engine_state.vent_LOX);
             set_valve_light(ui->fuel_vent_light, packetAV_downlink.engine_state.vent_fuel);
             set_valve_light(ui->pressurize_light, packetAV_downlink.engine_state.pressurant_fuel);
 
+            set_valve_img(ui->AV_igniter_LOX, packetAV_downlink.engine_state.igniter_LOX); 
+            set_valve_img(ui->AV_igniter_fuel, packetAV_downlink.engine_state.igniter_fuel); 
+            
+
             // Set telemetry data box
-            ui->N2O_pressure->setText(QString::number(packetAV_downlink.LOX_pressure, 'f', 2) + " bar");
-            ui->N2O_pressure->setStyleSheet(((packetAV_downlink.LOX_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
-            ui->N2O_temp->setText(QString::number(packetAV_downlink.fuel_level, 'f', 2) + " °C");
+            ui->LOX_pressure->setText(QString::number(packetAV_downlink.LOX_pressure, 'f', 2) + " bar");
+            ui->LOX_pressure->setStyleSheet(((packetAV_downlink.LOX_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+            // ui->N2O_temp->setText(QString::number(packetAV_downlink.fuel_level, 'f', 2) + " °C");
             ui->fuel_pressure->setText(QString::number(packetAV_downlink.fuel_pressure, 'f', 2) + " bar");
             ui->fuel_pressure->setStyleSheet(((packetAV_downlink.fuel_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
             ui->chamber_pressure->setText(QString::number(packetAV_downlink.chamber_pressure, 'f', 2) + " bar");
             ui->chamber_pressure->setStyleSheet(((packetAV_downlink.chamber_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+            
+            
+            ui->fuel_inj_pressure->setText(QString::number(packetAV_downlink.fuel_inj_pressure, 'f', 2) + " bar");
+            ui->fuel_inj_pressure->setStyleSheet(((packetAV_downlink.fuel_inj_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+            ui->LOX_inj_pressure->setText(QString::number(packetAV_downlink.LOX_inj_pressure, 'f', 2) + " bar");
+            ui->LOX_inj_pressure->setStyleSheet(((packetAV_downlink.LOX_inj_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+            ui->igniter_pressure->setText(QString::number(packetAV_downlink.igniter_pressure, 'f', 2) + " bar");
+            ui->igniter_pressure->setStyleSheet(((packetAV_downlink.igniter_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+            ui->N2_pressure->setText(QString::number(packetAV_downlink.N2_pressure, 'f', 2) + " bar");
+            ui->N2_pressure->setStyleSheet(((packetAV_downlink.N2_pressure < 0)?QString(FORMAT)+"color: red;":QString(FORMAT)+"color:white"));
+
 
             // ui->AV_temp->setText(QString::number(packetAV_downlink.baro_temp));
 //            ui->AV_humidity->setText(QString::number(packetAV_downlink.humidity));
@@ -601,15 +618,15 @@ void NordendGUI::on_debug_button_pressed() {
 // Valve clicked
 
 void NordendGUI::on_AV_servo_N2O_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, (packetAV_downlink.engine_state.main_LOX)?INACTIVE:ACTIVE, ui->AV_servo_N2O);
+    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, (packetAV_downlink.engine_state.main_LOX)?INACTIVE:ACTIVE, ui->AV_main_LOX);
 }
 
 void NordendGUI::on_AV_servo_fuel_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, (packetAV_downlink.engine_state.main_fuel)?INACTIVE:ACTIVE, ui->AV_servo_fuel);
+    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, (packetAV_downlink.engine_state.main_fuel)?INACTIVE:ACTIVE, ui->AV_main_fuel);
 }
 
 void NordendGUI::on_AV_vent_N2O_pressed() {
-    send_cmd(CMD_ID::AV_CMD_VENT_LOX, (packetAV_downlink.engine_state.vent_LOX)?INACTIVE:ACTIVE, ui->AV_vent_N2O);
+    send_cmd(CMD_ID::AV_CMD_VENT_LOX, (packetAV_downlink.engine_state.vent_LOX)?INACTIVE:ACTIVE, ui->AV_vent_LOX);
 }
 
 void NordendGUI::on_AV_vent_fuel_pressed() {
@@ -617,8 +634,8 @@ void NordendGUI::on_AV_vent_fuel_pressed() {
 }
 
 void NordendGUI::on_AV_pressurization_pressed() {
-    send_cmd(CMD_ID::AV_CMD_PRES_FUEL, (packetAV_downlink.engine_state.pressurant_fuel)?INACTIVE:ACTIVE, ui->AV_pressurization);
-    send_cmd(CMD_ID::AV_CMD_PRES_LOX, (packetAV_downlink.engine_state.pressurant_LOX)?INACTIVE:ACTIVE, ui->AV_pressurization);
+    send_cmd(CMD_ID::AV_CMD_PRES_FUEL, (packetAV_downlink.engine_state.pressurant_fuel)?INACTIVE:ACTIVE, ui->AV_pressurant_fuel);
+    send_cmd(CMD_ID::AV_CMD_PRES_LOX, (packetAV_downlink.engine_state.pressurant_LOX)?INACTIVE:ACTIVE, ui->AV_pressurant_LOX);
 }
 
 
@@ -658,27 +675,27 @@ void NordendGUI::on_cmd_inactive_pressurization_pressed() {
 }
 
 void NordendGUI::on_cmd_active_N2O_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, ACTIVE, ui->AV_servo_N2O);
+    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, ACTIVE, ui->AV_main_LOX);
 }
 
 void NordendGUI::on_cmd_inactive_N2O_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, INACTIVE, ui->AV_servo_N2O);
+    send_cmd(CMD_ID::AV_CMD_MAIN_LOX, INACTIVE, ui->AV_main_LOX);
 }
 
 void NordendGUI::on_cmd_active_fuel_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, ACTIVE, ui->AV_servo_fuel);
+    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, ACTIVE, ui->AV_main_fuel);
 }
 
 void NordendGUI::on_cmd_inactive_fuel_servo_pressed() {
-    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, INACTIVE, ui->AV_servo_fuel);
+    send_cmd(CMD_ID::AV_CMD_MAIN_FUEL, INACTIVE, ui->AV_main_fuel);
 }
 
 void NordendGUI::on_cmd_active_N2O_vent_pressed() {
-    send_cmd(CMD_ID::AV_CMD_VENT_LOX, ACTIVE, ui->AV_vent_N2O);
+    send_cmd(CMD_ID::AV_CMD_VENT_LOX, ACTIVE, ui->AV_vent_LOX);
 }
 
 void NordendGUI::on_cmd_inactive_N2O_vent_pressed() {
-    send_cmd(CMD_ID::AV_CMD_VENT_LOX, INACTIVE, ui->AV_vent_N2O);
+    send_cmd(CMD_ID::AV_CMD_VENT_LOX, INACTIVE, ui->AV_vent_LOX);
 }
 
 void NordendGUI::on_cmd_active_fuel_vent_pressed() {
@@ -711,21 +728,31 @@ void NordendGUI::on_reset_valves_pressed() {
 //    ui->fill_GSE->setCheckState(Qt::CheckState::Unchecked);
     set_valve_img(ui->GSE_fill, UNKNOWN);
     set_valve_img(ui->GSE_vent, UNKNOWN);
-    set_valve_img(ui->AV_vent_N2O, UNKNOWN);
+    set_valve_img(ui->AV_vent_LOX, UNKNOWN);
     set_valve_img(ui->AV_vent_fuel, UNKNOWN);
-    set_valve_img(ui->AV_servo_N2O, UNKNOWN);
-    set_valve_img(ui->AV_servo_fuel, UNKNOWN);
-    set_valve_img(ui->AV_pressurization, UNKNOWN);
-    ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/assets/Prop_background_V1.png);qproperty-iconSize: 700px;}");
-    // ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/images/prop_diagram_firehorn.png);qproperty-iconSize: 700px;}");
+    set_valve_img(ui->AV_main_LOX, UNKNOWN);
+    set_valve_img(ui->AV_main_fuel, UNKNOWN);
+    // set_valve_img(ui->AV_pressurization, UNKNOWN);
+    set_valve_img(ui->AV_igniter_LOX, UNKNOWN);
+    set_valve_img(ui->AV_igniter_fuel, UNKNOWN);
+    //ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/assets/Prop_background_V1.png);qproperty-iconSize: 700px;}");
+    ui->prop_diagram->setStyleSheet("QPushButton{background: transparent;qproperty-icon: url(:/assets/prop_diagram_firehorn.png);qproperty-iconSize: 700px;}");
 
-    ui->N2O_pressure->setText("0 bar");
-    ui->N2O_temp->setText("0 °C");
+    ui->LOX_pressure->setText("0 bar");
+    // ui->N2O_temp->setText("0 °C");
     ui->chamber_pressure->setText("0 bar");
     ui->fuel_pressure->setText("0 bar");
     ui->filling_pressure->setText("0 bar");
     ui->GSE_pressure->setText("0 bar");
     ui->GSE_temp->setText("0 °C");
+    ui->N2_pressure->setText("0 bar");
+    ui->LOX_inj_pressure->setText("0 bar");
+    ui->igniter_pressure->setText("0 bar");
+    ui->fuel_inj_pressure->setText("0 bar");
+    ui->engine_temp->setText("0 °C");
+    ui->LOX_level->setText("0%");
+    ui->fuel_level->setText("0%");
+
 
 
     // reset AV state table
