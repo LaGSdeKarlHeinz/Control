@@ -8,3 +8,6 @@ premièrement on reçois des infos par radio  tranmise au serveur, chaque data e
 
 2ème niveau:
 les données reçu doivent être update les bons champs sur l'UI, avec le ClientManager, lorsqu'un panneau est crée il peut s'abonner a certains champs de données et passe une callback qui est un setter pour ce champ de données
+
+# FirehornGUI 
+
