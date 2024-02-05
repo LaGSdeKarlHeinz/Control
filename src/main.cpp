@@ -1,11 +1,14 @@
+#include <iostream>
+
 #include <QApplication>
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QWidget>
 #include <QFrame>
-#include <iostream>
 #include <DataView.h>
+
+#include "GSManagerView.h"
 #include "Server.h"
 
 int main(int argc, char *argv[]) {
@@ -45,7 +48,7 @@ int main(int argc, char *argv[]) {
         std::cout << "server started" << std::endl;
         qDebug() << "Server started on port 12345";
     }
-    QFrame *rightSection2 = new DataView;
+    QFrame *rightSection2 = new GSManagerView;
 
     // Add the sections to the layout
     sectionsLayout->addWidget(leftSection, 3);

@@ -13,6 +13,7 @@ find_package(Qt6 COMPONENTS Widgets Core Network REQUIRED)
 set(SOURCES_GUI
     src/main.cpp
     src/views/DataView.cpp
+    src/views/GSManagerView.cpp
     src/server/server.cpp
     src/network-utils/ClientManager.cpp 
     src/json/jsoncpp.cpp
@@ -26,7 +27,10 @@ set(HEADERS_GUI
     include/ClientManager.h
     include/json/json.h 
     include/json/json-forwards.h 
+    include/GSManagerView.h 
 )
+
+
 
 set(SOURCES_SERVER
     src/server/server.cpp
