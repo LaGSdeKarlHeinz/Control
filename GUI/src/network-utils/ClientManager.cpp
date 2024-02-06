@@ -28,7 +28,8 @@ void ClientManager::handleReceivedData(const QString& data) {
     for (Json::Value member: root.getMemberNames()) {
         // get the callbacks associated to this fields 
         const QVector<CallbackFunction>& callbacks = subscriptions.value(member.asString());
-        // call them
+        // call them004
+        
         for (const auto& callback : callbacks) {
             callback(root[member.asString()].asString());
         }
