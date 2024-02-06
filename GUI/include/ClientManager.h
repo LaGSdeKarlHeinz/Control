@@ -1,10 +1,12 @@
 #ifndef CLIENTIMPLEMENTATION_H
 #define CLIENTIMPLEMENTATION_H
 
-#include "ClientInterface.h"
+#include <string>
+
 #include <QMap>
 #include <QVector>
-#include <string>
+
+#include "ClientInterface.h"
 
 class ClientManager: public ClientInterface {
 public:

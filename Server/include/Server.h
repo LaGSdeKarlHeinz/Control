@@ -3,6 +3,7 @@
 
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
+
 class Server : public QTcpServer {
     Q_OBJECT
 

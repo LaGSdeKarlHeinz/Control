@@ -1,0 +1,4 @@
+/home/zeloie/code/Control/Server/build/CMakeFiles/FirehornServer.dir
+/home/zeloie/code/Control/Server/build/CMakeFiles/edit_cache.dir
+/home/zeloie/code/Control/Server/build/CMakeFiles/rebuild_cache.dir
+/home/zeloie/code/Control/Server/build/CMakeFiles/FirehornServer_autogen.dir

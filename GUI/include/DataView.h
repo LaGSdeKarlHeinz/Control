@@ -1,18 +1,20 @@
 #ifndef DATAVIEW_H
 #define DATAVIEW_H
 
+#include <memory>
+
 #include <QLabel>
 
 class DataView : public QFrame {
     Q_OBJECT
 
 public:
-    DataView(QWidget *parent = nullptr);
+    DataView(std::unique_ptr<QWidget> parent = nullptr);
     
     virtual ~DataView() {};
 
 private:
-    QLabel *displayText;
+    std::unique_ptr<QLabel> displayText;
 };
 
 #endif // DATAWIDGET_H
