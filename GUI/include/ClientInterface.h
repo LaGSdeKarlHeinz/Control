@@ -1,3 +1,9 @@
+/**
+    @authors M.Rochat & E.Dutruy (Co-TL GS 23-24)
+    @date 06-02-2024
+    @brief Interface between app and server
+*/
+
 #ifndef CLIENTINTERFACE_H
 #define CLIENTINTERFACE_H
 

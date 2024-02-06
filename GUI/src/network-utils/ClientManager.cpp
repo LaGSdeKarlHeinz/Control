@@ -1,3 +1,9 @@
+/**
+    @authors M.Rochat & E.Dutruy (Co-TL GS 23-24)
+    @date 06-02-2024
+    @brief Client side of data stream handling
+*/
+
 #include "ClientManager.h"
 #include <json/json.h>
 #include <iostream>

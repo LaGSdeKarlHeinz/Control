@@ -1,3 +1,9 @@
+/**
+    @authors M.Rochat & E.Dutruy (Co-TL GS 23-24)
+    @date 06-02-2024
+    @brief QFrame displaying global data
+*/
+
 #include <memory>
 
 #include <QLabel>
@@ -21,4 +27,3 @@ DataView::DataView(std::unique_ptr<QWidget> parent) : QFrame(parent.get()) {
 
     layout->addWidget(displayText.get(), 2);
 }
-

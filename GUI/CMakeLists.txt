@@ -17,6 +17,7 @@ set(SOURCES_GUI
     src/views/DataView.cpp
     src/views/TelemetryView.cpp
     src/main.cpp
+    src/MainWindow.cpp
 )
 
 set(HEADERS_GUI
@@ -25,6 +26,8 @@ set(HEADERS_GUI
     include/ClientInterface.h 
     include/ClientManager.h
     include/DataView.h
+    include/MainWindow.h
+    include/Setup.h
     include/TelemetryView.h
 )
 
