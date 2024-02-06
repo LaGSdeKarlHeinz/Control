@@ -22,4 +22,4 @@ private:
     QList<QTcpSocket *> clients;
 };
 
-#endif // SERVER_H
+#endif /* SERVER_H */
