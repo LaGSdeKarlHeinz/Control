@@ -17,11 +17,12 @@
 
 #include "DataView.h"
 #include "TelemetryView.h"
+#include "GSManagerView.h"
 
 // ----------------------------- Setup Views -----------------------------------
 using LeftView = DataView;
 using MiddleView = TelemetryView;
-using RightView = DataView;
+using RightView = GSManagerView;
 
 
 // ----------------------------- MainWindow setup ------------------------------

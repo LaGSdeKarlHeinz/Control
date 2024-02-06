@@ -15,19 +15,21 @@ set(SOURCES_GUI
     src/json/jsoncpp.cpp
     src/network-utils/ClientManager.cpp
     src/views/DataView.cpp
+    src/views/GSManagerView.cpp
     src/views/TelemetryView.cpp
     src/main.cpp
     src/MainWindow.cpp
 )
 
 set(HEADERS_GUI
+    src/Setup.h
     include/json/json-forwards.h
     include/json/json.h
     include/ClientInterface.h 
     include/ClientManager.h
     include/DataView.h
+    include/GSManagerView.h
     include/MainWindow.h
-    include/Setup.h
     include/TelemetryView.h
 )
 
