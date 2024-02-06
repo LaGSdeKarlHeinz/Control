@@ -38,7 +38,16 @@ namespace mws {
 
 // ----------------------------- Colour ----------------------------------------
 namespace col {
-    QString background = "background-color: #696a6e";
+    QString background = "#161A36"; 
+    QString primary = "#B8C196";
+    QString secondary = "#BDB979"; 
+    QString accent = "#F5251A"; 
+    QString complementary = "#457069";
+
+    QString background() {
+        return std::format("background-color: {}", background);
+    }
+
 } // namespace col
 
 

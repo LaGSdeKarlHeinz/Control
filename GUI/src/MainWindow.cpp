@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     QWidget *centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
-    centralWidget->setStyleSheet(col::background);
+    centralWidget->setStyleSheet(col::background());
     
     QVBoxLayout *centralLayout = new QVBoxLayout(centralWidget);
 
