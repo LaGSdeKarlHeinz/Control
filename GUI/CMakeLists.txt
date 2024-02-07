@@ -17,6 +17,7 @@ set(SOURCES_GUI
     src/views/DataView.cpp
     src/views/GSManagerView.cpp
     src/views/TelemetryView.cpp
+    src/views/TimerView.cpp
     src/main.cpp
     src/MainWindow.cpp
 )
@@ -31,6 +32,7 @@ set(HEADERS_GUI
     include/GSManagerView.h
     include/MainWindow.h
     include/TelemetryView.h
+    include/TimerView.h
 )
 
 # Create the executable

@@ -7,10 +7,16 @@
 #ifndef CLIENTIMPLEMENTATION_H
 #define CLIENTIMPLEMENTATION_H
 
+#include <iostream>
 #include <string>
 
 #include <QMap>
 #include <QVector>
+#include <QJsonObject>
+
+
+
+
 
 #include "ClientInterface.h"
 
@@ -23,6 +29,8 @@ public:
 
 private:
     QMap<std::string, QVector<CallbackFunction>> subscriptions;
+    // void notifyChildrenFields(Json::Value local_root); const QJsonObject& localObject
+    void notifyChildrenFields(const QJsonObject& localObject);
 };
 
 #endif // CLIENTIMPLEMENTATION_H

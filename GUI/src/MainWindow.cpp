@@ -14,6 +14,8 @@
 #include "Setup.h"
 #include "MainWindow.h"
 
+
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setWindowTitle(mws::title);
     setGeometry(mws::x, mws::y, mws::width, mws::height);
@@ -26,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     QHBoxLayout *sectionsLayout = createSectionsLayout();
     centralLayout->addLayout(sectionsLayout);
+
+    
 }
 
 

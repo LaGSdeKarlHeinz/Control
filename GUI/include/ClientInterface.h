@@ -14,7 +14,7 @@ class ClientInterface {
 public:
     virtual ~ClientInterface() = default;
 
-    using CallbackFunction = std::function<void(const std::string&)>;
+    using CallbackFunction = std::function<void(const QString)>;
 
     virtual void subscribe(const std::string& field, CallbackFunction callback) = 0;
     virtual void handleReceivedData(const QString& data) = 0;

@@ -15,15 +15,22 @@
 #include <QWidget>
 #include <QFrame>
 
+#include "ClientManager.h"
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
     MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow() {};
+    inline const static std::unique_ptr<ClientManager> clientManager = std::make_unique<ClientManager>();
+
 
 private:
     QHBoxLayout* createSectionsLayout();
 };
+
+
+
 
 #endif /* MAINWINDOW_H */
