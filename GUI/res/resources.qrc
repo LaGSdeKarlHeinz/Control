@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>icons/clock-icon-white.png</file>
+        <file>icons/clock-icon-black.png</file>
+    </qresource>
+</RCC>

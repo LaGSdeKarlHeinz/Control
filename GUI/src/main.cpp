@@ -6,6 +6,7 @@
 */
 
 #include <QApplication>
+#include <QResource>
 
 #include "MainWindow.h"
 #include "ClientManager.h"
@@ -15,6 +16,9 @@ void fakeDataHandling();
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
+
+
+    QResource::registerResource("/home/mrochat/ert/GUIV2/GUI/res/resources.rcc");
   
     MainWindow mainWindow;
     QTimer::singleShot(5000, fakeDataHandling);

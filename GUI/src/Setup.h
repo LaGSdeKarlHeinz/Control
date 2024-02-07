@@ -32,19 +32,19 @@ namespace mws {
     const int y = 100;
     const int width = 800;
     const int height = 600;
-    const int middleSectionWidth = 40; // % left and right  will be (100-x)/2
+    const int middleSectionWidth = 50; // % left and right  will be (100-x)/2
 } // namespace mws
 
 
 // ----------------------------- Colour ----------------------------------------
 namespace col {
-    QString backgroundColorCode = "#161A36"; 
-    QString primary = "#B8C196";
-    QString secondary = "#BDB979"; 
-    QString accent = "#F5251A"; 
-    QString complementary = "#457069";
+    inline QString backgroundColorCode = "#161A36"; 
+    inline QString primary = "#B8C196";
+    inline QString secondary = "#BDB979"; 
+    inline QString accent = "#F5251A"; 
+    inline QString complementary = "#457069";
 
-    QString background() {return "background-color: " + backgroundColorCode;}
+    inline QString background() {return "background-color: " + backgroundColorCode + ";";}
 
 } // namespace col
 
