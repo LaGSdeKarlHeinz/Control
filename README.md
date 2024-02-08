@@ -16,3 +16,8 @@ inspi design : https://www.google.com/search?sca_esv=2610265ff35e352d&sxsrf=ACQV
 note pour les requête : 
 get :                                        
     getSerialStatus => response = "serialNameUsed", "serialStatus" (fields expected)
+
+
+when adding stuff to res make sure to compile the qrc with the following command : 
+
+```rcc -binary myresource.qrc -o myresource.rcc```

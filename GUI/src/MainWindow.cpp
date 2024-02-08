@@ -13,6 +13,8 @@
 
 #include "Setup.h"
 #include "MainWindow.h"
+#include "components/DraggableButton.h"
+#include "ControlPannelView.h"
 
 
 
@@ -33,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 
+
 QHBoxLayout* MainWindow::createSectionsLayout() {
     QHBoxLayout *sectionsLayout = new QHBoxLayout();
 
@@ -40,9 +43,29 @@ QHBoxLayout* MainWindow::createSectionsLayout() {
     QFrame *middleSection = new MiddleView();
     QFrame *rightSection = new RightView();
     
+    // pannelButton = new DraggableButton(this);
+    pannelSection = new ControlPannelView(this);
+    pannelSection->move(100, 300);
+
+    replacePannelButton();
+
+
+
     sectionsLayout->addWidget(leftSection, (100-mws::middleSectionWidth)/2);
     sectionsLayout->addWidget(middleSection, mws::middleSectionWidth);
     sectionsLayout->addWidget(rightSection, (100-mws::middleSectionWidth)/2);
+    
 
     return sectionsLayout;
 }
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    replacePannelButton();    
+    pannelSection->resizeWidget();
+}
+
+void MainWindow::replacePannelButton() {
+    // QPoint p = QWidget::mapTo(this, QPoint(width()/2-pannelButton->width()/2, height()-pannelButton->height()));
+    // pannelButton->move(p);
+}
+

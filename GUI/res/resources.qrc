@@ -3,5 +3,6 @@
     <qresource>
         <file>icons/clock-icon-white.png</file>
         <file>icons/clock-icon-black.png</file>
+        <file>icons/up-arrow.png</file>
     </qresource>
 </RCC>

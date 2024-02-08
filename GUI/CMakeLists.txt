@@ -12,9 +12,10 @@ find_package(Qt6 COMPONENTS Widgets Core Network REQUIRED)
 
 # Add your source files
 set(SOURCES_GUI
+    src/components/DraggableButton.cpp
     src/json/jsoncpp.cpp
     src/network-utils/ClientManager.cpp
-    src/views/CardView.cpp
+    src/views/ControlPannelView.cpp 
     src/views/DataView.cpp
     src/views/GSManagerView.cpp
     src/views/SerialView.cpp
@@ -26,11 +27,12 @@ set(SOURCES_GUI
 
 set(HEADERS_GUI
     src/Setup.h
+    include/components/DraggableButton.h
     include/json/json-forwards.h
     include/json/json.h
-    include/CardView.h
     include/ClientInterface.h 
     include/ClientManager.h
+    include/ControlPannelView.h
     include/DataView.h
     include/GSManagerView.h
     include/MainWindow.h
