@@ -20,4 +20,4 @@ get :
 
 when adding stuff to res make sure to compile the qrc with the following command : 
 
-```rcc -binary myresource.qrc -o myresource.rcc```
+```rcc -binary resources.qrc -o resources.rcc```
