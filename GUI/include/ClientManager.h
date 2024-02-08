@@ -22,13 +22,21 @@
 
 class ClientManager: public ClientInterface {
 public:
-    void subscribe(const std::string& field, CallbackFunction callback) override;
+    void subscribe(const std::string& field, CallbackFunction<QString> callback) override;
+    void subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) override;
     void handleReceivedData(const QString& data) override;
+    void send(const QString& data) override;
     
     // Additional functions as needed
 
 private:
-    QMap<std::string, QVector<CallbackFunction>> subscriptions;
+    QMap<std::string, QVector<CallbackFunction<QString>>> subscriptionsStrings;
+    QMap<std::string, QVector<CallbackFunction<QJsonValue>>> subscriptionsJson;
+
+    
+    
+    
+
     // void notifyChildrenFields(Json::Value local_root); const QJsonObject& localObject
     void notifyChildrenFields(const QJsonObject& localObject);
 };

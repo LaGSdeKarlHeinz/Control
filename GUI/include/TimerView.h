@@ -24,7 +24,10 @@ protected:
 
 private:
     QTimer timer1;
- 
+    
+    std::function<void(const QJsonValue&)> resetTimer = [this](const QJsonValue& json) { timer1Count=-1; updateTimer1(); };
+
+
     QLabel timer1Label;
     QLabel timerTitle;
 

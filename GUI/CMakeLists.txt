@@ -14,8 +14,10 @@ find_package(Qt6 COMPONENTS Widgets Core Network REQUIRED)
 set(SOURCES_GUI
     src/json/jsoncpp.cpp
     src/network-utils/ClientManager.cpp
+    src/views/CardView.cpp
     src/views/DataView.cpp
     src/views/GSManagerView.cpp
+    src/views/SerialView.cpp
     src/views/TelemetryView.cpp
     src/views/TimerView.cpp
     src/main.cpp
@@ -26,13 +28,16 @@ set(HEADERS_GUI
     src/Setup.h
     include/json/json-forwards.h
     include/json/json.h
+    include/CardView.h
     include/ClientInterface.h 
     include/ClientManager.h
     include/DataView.h
     include/GSManagerView.h
     include/MainWindow.h
+    include/SerialView.h
     include/TelemetryView.h
     include/TimerView.h
+    
 )
 
 # Create the executable

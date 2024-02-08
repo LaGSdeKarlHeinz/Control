@@ -11,4 +11,8 @@ les données reçu doivent être update les bons champs sur l'UI, avec le Client
 
 # FirehornGUI 
 
+inspi design : https://www.google.com/search?sca_esv=2610265ff35e352d&sxsrf=ACQVn0_TsTecfndTSljVxfyZIotZF1ggsQ:1707342823399&q=modern+ui&tbm=isch&source=lnms&prmd=ivsnbmtz&sa=X&ved=2ahUKEwiMiv7Tm5qEAxWv9gIHHWovDWUQ0pQJegQIEhAB&biw=2560&bih=1279&dpr=1#imgrc=0YlyaGQ0j6tJfM
 
+note pour les requête : 
+get :                                        
+    getSerialStatus => response = "serialNameUsed", "serialStatus" (fields expected)

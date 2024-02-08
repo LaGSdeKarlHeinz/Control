@@ -5,16 +5,18 @@
 #include <QLayout>
 
 #include "TimerView.h"
+#include "MainWindow.h"
+#include "../Setup.h"
 
 
 
 TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Count(0), timerTitle(title) {
     QVBoxLayout *layout = new QVBoxLayout(this);
-    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    setObjectName("TimerView");
     
 
-
     timer1Label.setText(formatTime(timer1Count));
+    timer1Label.setObjectName("child");
     // clock icon from https://icons8.com/icon/113106/clock
     QPixmap pm(":/icons/clock-icon-white.png");
     originalPixmap = pm;
@@ -22,16 +24,17 @@ TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Co
     
     
     imageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    imageLabel->setObjectName("child");
     imageLabel->setPixmap(pm.scaled(this->widthMM(), this->heightMM(), Qt::KeepAspectRatio));
 
-
+    timerTitle.setObjectName("child");
     
     layout->addWidget(&timerTitle, 1, Qt::AlignCenter);
-    layout->addWidget(imageLabel, 8, Qt::AlignCenter);
+    layout->addWidget(imageLabel, 6, Qt::AlignCenter);
     layout->addWidget(&timer1Label, 1, Qt::AlignCenter);
     connect(&timer1, &QTimer::timeout, this, &TimerView::updateTimer1);
     
-
+    MainWindow::clientManager->subscribe(title.toStdString(), resetTimer);
     timer1.start(1000);
 }
 
@@ -39,10 +42,7 @@ TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Co
 
 void TimerView::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
-    // Scale the pixmap to fit the size of the image label
     QPixmap scaledPixmap = originalPixmap.scaled(imageLabel->size(), Qt::KeepAspectRatio);
-
-    // Set the scaled pixmap as the pixmap for the image label
     imageLabel->setPixmap(scaledPixmap);
 }
 

@@ -32,24 +32,26 @@ void fakeDataHandling() {
     {
   "name": "John",
   "age": 30,
-  "isMarried": true,
-  "children": ["Alice", "Bob"],
+  "downrange": "228m",
+  "serialNameUsed": "tty0",
+  "serialStatus" : "open",
+  "names": ["Alice", "Bob"],
   "address": {
-    "test": "123 Main St",
+    "street": "123 Main St",
     "city": "Anytown",
     "zip": "12345",
     "coordinates": {
-      "latitude": 40.7128,
+      "test": 40.7128,
       "longitude": -74.0060
     }
   },
   "contacts": [
     {
-      "name": "Mary",
+      "packetNumber": "12",
       "phone": "123-456-7890"
     },
     {
-      "name": "Mike",
+      "serialStatus": "close",
       "phone": "987-654-3210"
     }
   ]
