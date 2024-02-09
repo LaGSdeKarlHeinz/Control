@@ -11,12 +11,13 @@
 
 #include <QLabel>
 #include <QPushButton>
+#include <QGridLayout>
 
 class ControlPannelView : public QFrame {
     Q_OBJECT
 
 public:
-    ControlPannelView(QWidget *parent = nullptr);
+    ControlPannelView(QWidget *parent = nullptr, QMap<std::string, QMap<std::string, std::vector<std::string>>> *controls = nullptr);
     void resizeWidget();
     virtual ~ControlPannelView() {};
 
@@ -28,12 +29,16 @@ private:
     std::unique_ptr<QLabel> displayText;
     int getHeightPos();
     void setupExpandButton();
-
+    void setupContainerWidget();
+    void createValveControlButtons(QGridLayout *gridLayout, const std::vector<std::string> &strings, int maxColumns);
+    void createValveLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<std::string>> *valves);
+    void createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<std::string>> *buttons);
+    
     QPixmap buttonPixMap;
-    int borderOffset;
     bool toggled;
     QWidget *controlContainerWidget;
     QPushButton *expandButton;
 };
 
 #endif // CONTROLPANNELVIEW_H
+

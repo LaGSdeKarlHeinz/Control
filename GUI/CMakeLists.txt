@@ -13,6 +13,8 @@ find_package(Qt6 COMPONENTS Widgets Core Network REQUIRED)
 # Add your source files
 set(SOURCES_GUI
     src/components/DraggableButton.cpp
+    src/components/ToggleButton.cpp
+    src/components/ValveControlButton.cpp
     src/json/jsoncpp.cpp
     src/network-utils/ClientManager.cpp
     src/views/ControlPannelView.cpp 
@@ -28,6 +30,8 @@ set(SOURCES_GUI
 set(HEADERS_GUI
     src/Setup.h
     include/components/DraggableButton.h
+    include/components/ToggleButton.h
+    include/components/ValveControlButton.h
     include/json/json-forwards.h
     include/json/json.h
     include/ClientInterface.h 
@@ -38,8 +42,7 @@ set(HEADERS_GUI
     include/MainWindow.h
     include/SerialView.h
     include/TelemetryView.h
-    include/TimerView.h
-    
+    include/TimerView.h    
 )
 
 # Create the executable

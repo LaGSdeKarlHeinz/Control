@@ -4,5 +4,6 @@
         <file>icons/clock-icon-white.png</file>
         <file>icons/clock-icon-black.png</file>
         <file>icons/up-arrow.png</file>
+        <file>icons/refresh-icon.png</file>
     </qresource>
 </RCC>

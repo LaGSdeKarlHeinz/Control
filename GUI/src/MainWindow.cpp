@@ -43,8 +43,20 @@ QHBoxLayout* MainWindow::createSectionsLayout() {
     QFrame *middleSection = new MiddleView();
     QFrame *rightSection = new RightView();
     
-    // pannelButton = new DraggableButton(this);
-    pannelSection = new ControlPannelView(this);
+    // Instantiate a QMap with std::string keys and std::vector<std::string> values
+    QMap<std::string, std::vector<std::string>> valvesMap;
+    QMap<std::string, std::vector<std::string>> pushButtonMap;
+    QMap<std::string, QMap<std::string, std::vector<std::string>>> controlMap;
+
+    // Populate the QMap with key-value pairs
+    valvesMap.insert("Engine Valves", {"test 5", "test 6", "test 7", "test 8", "test 9"});
+    valvesMap.insert("GSE Valves", {"test 1", "test 2", "test 3", "test 4"});
+    
+    pushButtonMap.insert("Command", {"Command 1", "Command 2", "Command 3"});
+    controlMap.insert("ValveControlButton", valvesMap);
+    controlMap.insert("QPushButton", pushButtonMap);
+
+    pannelSection = new ControlPannelView(this, &controlMap);
     pannelSection->move(100, 300);
 
     replacePannelButton();

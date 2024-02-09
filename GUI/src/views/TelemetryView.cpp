@@ -16,7 +16,7 @@
 TelemetryView::TelemetryView(std::unique_ptr<QWidget> parent) : QFrame(parent.get()) {
     
     // Set up the appearance or behavior as needed
-    // setStyleSheet("background-color: lightblue;");
+    //setStyleSheet("background-color: lightblue;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 
     altitudeLabel = std::make_unique<QLabel>("Altitude");
