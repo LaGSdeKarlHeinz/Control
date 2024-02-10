@@ -18,10 +18,11 @@
 #include "DataView.h"
 #include "TelemetryView.h"
 #include "GSManagerView.h"
+#include "ValveControlView.h"
 
 // ----------------------------- Setup Views -----------------------------------
-using LeftView = DataView;
-using MiddleView = TelemetryView;
+using LeftView = TelemetryView;
+using MiddleView = ValveControlView;
 using RightView = GSManagerView;
 
 
@@ -33,6 +34,7 @@ namespace mws {
     const int width = 800;
     const int height = 600;
     const int middleSectionWidth = 50; // % left and right  will be (100-x)/2
+    const int sideWidth = (100-middleSectionWidth)/2;
 } // namespace mws
 
 

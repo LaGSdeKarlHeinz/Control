@@ -21,3 +21,8 @@ get :
 when adding stuff to res make sure to compile the qrc with the following command : 
 
 ```rcc -binary resources.qrc -o resources.rcc```
+
+
+# Installation 
+
+QTSvg : sudo apt-get -y install libqt6svg6-dev

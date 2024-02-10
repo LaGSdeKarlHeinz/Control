@@ -14,6 +14,7 @@ TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Co
     QVBoxLayout *layout = new QVBoxLayout(this);
     setObjectName("TimerView");
     
+    
 
     timer1Label.setText(formatTime(timer1Count));
     timer1Label.setObjectName("child");
@@ -23,8 +24,9 @@ TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Co
     imageLabel = new QLabel;
     
     
-    imageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // imageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     imageLabel->setObjectName("child");
+    
     imageLabel->setPixmap(pm.scaled(this->widthMM(), this->heightMM(), Qt::KeepAspectRatio));
 
     timerTitle.setObjectName("child");

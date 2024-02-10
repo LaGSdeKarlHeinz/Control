@@ -1,20 +1,44 @@
 #include <iostream>
 
-#include "components/ValveControlButton.h"
 #include <QHBoxLayout>
 #include <QPixmap>
 #include <QMouseEvent>
 #include <QTimer>
+#include <QtSvg/QSvgRenderer>
+#include <QPainter>
 
+#include "components/ValveControlButton.h"
 #include "../Setup.h"
 
-RefreshLabel::RefreshLabel(const QString &text, QWidget *parent) : QLabel(text, parent) {
+CLickableIcon::CLickableIcon(const QString &text, QWidget *parent) : QLabel(text, parent) {
     setObjectName("refreshButton");
     
 
     resetStyle();
+    QPixmap buttonPixMap;
     // icon from icons8 : https://icones8.fr/icon/123373/mettre-%C3%A0-jour-la-rotation-%C3%A0-gauche
-    QPixmap buttonPixMap(":/icons/refresh-icon.png");
+    if (text.endsWith(".svg", Qt::CaseInsensitive)) {
+        QSvgRenderer svgRenderer(QString(":/images/prop-diagram-firehorn.svg"));
+        if (svgRenderer.isValid()) {
+            // Calculate the scaled size while maintaining the aspect ratio
+            int scaledWidth = svgRenderer.defaultSize().width();
+            int scaledHeight = svgRenderer.defaultSize().height();
+
+            // Calculate the offsets to center the image both horizontally and vertically
+            int xOffset = 0; // Center horizontally
+            int yOffset = 0; // Center vertically
+
+            // Render the SVG onto a pixmap
+            buttonPixMap = QPixmap(scaledWidth, scaledHeight);
+            buttonPixMap.fill(Qt::transparent);
+            QPainter painter(&buttonPixMap);
+            svgRenderer.render(&painter, QRectF(0, 0, scaledWidth, scaledHeight));
+        }
+    } else {
+       buttonPixMap = QPixmap(text);
+    }
+
+    
     setScaledContents(false); 
     setFixedHeight(40);
     setFixedWidth(40);
@@ -22,7 +46,7 @@ RefreshLabel::RefreshLabel(const QString &text, QWidget *parent) : QLabel(text, 
     setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void RefreshLabel::mousePressEvent(QMouseEvent *event)
+void CLickableIcon::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
         setStyleSheet(QString(R"(
@@ -41,7 +65,7 @@ void RefreshLabel::mousePressEvent(QMouseEvent *event)
         emit clicked();
 }
 
-void RefreshLabel::resetStyle() {
+void CLickableIcon::resetStyle() {
     setStyleSheet(QString(R"(
             #refreshButton {
                 background:transparent;
@@ -68,7 +92,7 @@ ValveControlButton::ValveControlButton(const QString &title, QWidget *parent) : 
     titleLabel->setFont(font);
 
     toggleButton = new ToggleButton(this);
-    refreshLabel = new RefreshLabel(":/icons/up-arrow.png", this);
+    refreshLabel = new CLickableIcon(":/icons/refresh-icon.png", this);
 
 
     // Set up layout
@@ -86,7 +110,7 @@ ValveControlButton::ValveControlButton(const QString &title, QWidget *parent) : 
     setLayout(mainLayout);
 
     connect(toggleButton, &ToggleButton::toggled, this, &ValveControlButton::valveToggled);
-    connect(refreshLabel, &RefreshLabel::clicked, this, &ValveControlButton::refreshClicked);
+    connect(refreshLabel, &CLickableIcon::clicked, this, &ValveControlButton::refreshClicked);
     refreshLabel->setCursor(Qt::PointingHandCursor); // Change cursor to hand cursor for hover effect
 }
 

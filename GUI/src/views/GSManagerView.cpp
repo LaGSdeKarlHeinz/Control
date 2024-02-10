@@ -19,6 +19,7 @@ GSManagerView::GSManagerView(std::unique_ptr<QWidget> parent) : QFrame(parent.ge
 
     // setStyleSheet("background-color: lightblue;");
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    setMinimumWidth(mws::sideWidth/100.0 * mws::width);
     setupUI();
 
 }
@@ -112,13 +113,20 @@ void GSManagerView::setInfoChildrenStyle(QFrame *child, int fontSize, bool isBol
 }
 
 void GSManagerView::setupTimersSection() {
+
+
     timerViewAV = new TimerView("AV");
     timerViewGSE = new TimerView("GSE");
     // layout->addWidget(label_timers.get(), 1);
-    QWidget *internalStucture = new QWidget(); 
+    QWidget *internalStucture = new QWidget();
     QHBoxLayout *innerLayout = new QHBoxLayout(internalStucture);
+    internalStucture->setMinimumWidth(250);
+    // Set size policy to expand horizontally
+    internalStucture->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     innerLayout->addWidget(timerViewAV, 1);
     innerLayout->addWidget(timerViewGSE, 1);
+
     internalStucture->setObjectName("child");
 
     QLabel *title = new QLabel("Time Since Last Packets");
@@ -127,8 +135,12 @@ void GSManagerView::setupTimersSection() {
 
     timersSection = new QWidget;
     timersSection->setObjectName("timerSection");
+    timersSection->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     timersSection->setStyleSheet(col::defaultCardStyle("timerSection"));
+    //timersSection->setStyleSheet("background:yellow;");
+
     QVBoxLayout *timersLayout = new QVBoxLayout(timersSection);
+    
     timersLayout->addWidget(title, 1, Qt::AlignHCenter);
     timersLayout->addWidget(internalStucture, 3, Qt::AlignHCenter);
 

@@ -5,11 +5,11 @@
 #include <QLabel>
 #include "ToggleButton.h"
 
-class RefreshLabel : public QLabel
+class CLickableIcon : public QLabel
 {
     Q_OBJECT
 public:
-    RefreshLabel(const QString &text, QWidget *parent = nullptr);
+    CLickableIcon(const QString &text, QWidget *parent = nullptr);
     void resetStyle();
 
 signals:
@@ -40,7 +40,7 @@ signals:
 
 private:
     ToggleButton *toggleButton;
-    RefreshLabel *refreshLabel;
+    CLickableIcon *refreshLabel;
     
     
 };

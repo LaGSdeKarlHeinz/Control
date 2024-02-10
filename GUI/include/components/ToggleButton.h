@@ -29,7 +29,6 @@ private:
     qreal m_offset;
     qreal offset() const;
     void setOffset(qreal offsetValue);
-    
 };
 
 #endif // TOGGLEBUTTON_H
