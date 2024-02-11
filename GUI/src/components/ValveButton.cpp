@@ -10,11 +10,12 @@
 
 ValveButton::ValveButton(Orientation orientation, QWidget *parent) : QLabel(parent), currentState(Unknown), iconSize(52, 52) {
     // Set initial state and update button icon
-    setState(Open); // Change this to set the initial state as needed
+    // Change this to set the initial state as needed
+    this->orientation = orientation;
     setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     setObjectName("valveButton");
     resetStyle();
-    this->orientation = orientation;
+    setState(Open);
     
     
 }

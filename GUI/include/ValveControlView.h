@@ -24,21 +24,24 @@ class ValveControlView : public QFrame {
     Q_OBJECT
 
 public:
-
-    
-
     ValveControlView(QWidget *parent = nullptr);
     virtual ~ValveControlView() {}
-
-    void setSvgBackground(const QString& filePath);
-    void addButtonIcon(float x, float y, ValveButton::Orientation orientation = ValveButton::Orientation::Vertical);
-
+    
 protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    void setSvgBackground(const QString& filePath);
+    void addButtonIcon(float x, float y, ValveButton::Orientation orientation = ValveButton::Orientation::Vertical);
+    void addDataLabel(const QString& field, float x, float y);
+    void placeValves();
+    void placeDataLabels();
+    void placeCommandButtons();
+    void addComponent(QWidget* component,  float x, float y);
+    void addCommandButton(const QString& label, float x, float y);
+
     std::unique_ptr<QPixmap> backgroundImage;
-    QMap<ValveButton*, Position> valvesMap;
+    QMap<QWidget*, Position> componentsMap;
 };
 
 #endif // VALVECONTROLVIEW_H

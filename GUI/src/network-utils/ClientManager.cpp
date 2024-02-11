@@ -74,7 +74,8 @@ void ClientManager::send(const QString& data) {
     handleReceivedData(QString(R"({
         "AV": {
             "serialNameUsed": "-",
-            "serialStatus" : "close"
+            "serialStatus" : "close",
+            "dataField": "data"
             }
         }
     )"));

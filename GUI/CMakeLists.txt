@@ -12,6 +12,7 @@ find_package(Qt6 COMPONENTS Widgets Core Network Svg REQUIRED)
 
 # Add your source files
 set(SOURCES_GUI
+    src/components/DataLabel.cpp
     src/components/DraggableButton.cpp
     src/components/ToggleButton.cpp
     src/components/ValveButton.cpp
@@ -31,6 +32,7 @@ set(SOURCES_GUI
 
 set(HEADERS_GUI
     src/Setup.h
+    include/components/DataLabel.h
     include/components/DraggableButton.h
     include/components/ToggleButton.h
     include/components/ValveButton.h

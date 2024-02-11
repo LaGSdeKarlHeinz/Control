@@ -44,7 +44,7 @@ TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Co
 
 void TimerView::resizeEvent(QResizeEvent *event) {
     QWidget::resizeEvent(event);
-    QPixmap scaledPixmap = originalPixmap.scaled(imageLabel->size(), Qt::KeepAspectRatio);
+    QPixmap scaledPixmap = originalPixmap.scaled(imageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
     imageLabel->setPixmap(scaledPixmap);
 }
 
