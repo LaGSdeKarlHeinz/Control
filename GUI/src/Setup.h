@@ -18,10 +18,11 @@
 #include "DataView.h"
 #include "TelemetryView.h"
 #include "GSManagerView.h"
+#include "ValveControlView.h"
 
 // ----------------------------- Setup Views -----------------------------------
-using LeftView = DataView;
-using MiddleView = TelemetryView;
+using LeftView = TelemetryView;
+using MiddleView = ValveControlView;
 using RightView = GSManagerView;
 
 
@@ -32,20 +33,36 @@ namespace mws {
     const int y = 100;
     const int width = 800;
     const int height = 600;
-    const int middleSectionWidth = 40; // % left and right  will be (100-x)/2
+    const int middleSectionWidth = 50; // % left and right  will be (100-x)/2
+    const int sideWidth = (100-middleSectionWidth)/2;
 } // namespace mws
 
 
 // ----------------------------- Colour ----------------------------------------
 namespace col {
-    QString backgroundColorCode = "#161A36"; 
-    QString primary = "#B8C196";
-    QString secondary = "#BDB979"; 
-    QString accent = "#F5251A"; 
-    QString complementary = "#457069";
+    inline QString backgroundColorCode = "#161A36"; 
+    inline QString primary = "#B8C196";
+    inline QString secondary = "#BDB979"; 
+    inline QString accent = "#F5251A"; 
+    inline QString complementary = "#457069";
+    inline QString complementaryLighter = "#538078";
 
-    QString background() {return "background-color: " + backgroundColorCode;}
-
+    inline QString background() {return "background-color: " + backgroundColorCode + ";";}
+    inline  QString defaultCardStyle(QString id) {return QString(R"(
+        #%3 {
+        background: qradialgradient(cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 %1, stop:0.95 %2);
+        border-radius: 10%;
+        border-width: 2px;
+        border-color: #B8C196;
+        }
+        #child {
+            color: #B8C196;
+            background: transparent;
+        }
+        )")          
+        .arg(col::backgroundColorCode)
+        .arg("rgba(30, 35, 69, 225)")
+        .arg(id) ;}
 } // namespace col
 
 

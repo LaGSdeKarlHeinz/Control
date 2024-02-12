@@ -14,8 +14,11 @@
 #include <QHBoxLayout>
 #include <QWidget>
 #include <QFrame>
+#include <QPushButton>
 
+#include "components/DraggableButton.h"
 #include "ClientManager.h"
+#include "ControlPannelView.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -25,8 +28,15 @@ public:
     virtual ~MainWindow() {};
     inline const static std::unique_ptr<ClientManager> clientManager = std::make_unique<ClientManager>();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
+    void replacePannelButton();
+    void buttonGrabbed(QEvent *event);
+
+    DraggableButton *pannelButton; 
+    ControlPannelView *pannelSection;
     QHBoxLayout* createSectionsLayout();
 };
 

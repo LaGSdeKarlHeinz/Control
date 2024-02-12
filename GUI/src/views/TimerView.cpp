@@ -1,61 +1,63 @@
+#include <iostream>
+
 #include <QVBoxLayout>
+#include <QPixmap>
+#include <QLayout>
 
 #include "TimerView.h"
+#include "MainWindow.h"
+#include "../Setup.h"
 
 
-TimerView::TimerView(QWidget *parent) : QWidget(parent), timer1Count(0), timer2Count(0) {
+
+TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Count(0), timerTitle(title) {
     QVBoxLayout *layout = new QVBoxLayout(this);
+    setObjectName("TimerView");
+    
+    
 
-    timer1Label.setText("0");
-    timer2Label.setText("0");
-    resetButton1.setText("Reset Timer 1");
-    resetButton2.setText("Reset Timer 2");
+    timer1Label.setText(formatTime(timer1Count));
+    timer1Label.setObjectName("child");
+    // clock icon from https://icons8.com/icon/113106/clock
+    QPixmap pm(":/icons/clock-icon-white.png");
+    originalPixmap = pm;
+    imageLabel = new QLabel;
+    
+    
+    // imageLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    imageLabel->setObjectName("child");
+    
+    imageLabel->setPixmap(pm.scaled(this->widthMM(), this->heightMM(), Qt::KeepAspectRatio));
 
-    connect(&resetButton1, &QPushButton::clicked, this, &TimerView::resetTimer1);
-    connect(&resetButton2, &QPushButton::clicked, this, &TimerView::resetTimer2);
-    connect(this, &TimerView::customEventReceived, this, &TimerView::handleCustomEvent);
-
-    layout->addWidget(&timer1Label);
-    layout->addWidget(&resetButton1);
-    layout->addWidget(&timer2Label);
-    layout->addWidget(&resetButton2);
-
+    timerTitle.setObjectName("child");
+    
+    layout->addWidget(&timerTitle, 1, Qt::AlignCenter);
+    layout->addWidget(imageLabel, 6, Qt::AlignCenter);
+    layout->addWidget(&timer1Label, 1, Qt::AlignCenter);
     connect(&timer1, &QTimer::timeout, this, &TimerView::updateTimer1);
-    connect(&timer2, &QTimer::timeout, this, &TimerView::updateTimer2);
-
+    
+    MainWindow::clientManager->subscribe(title.toStdString(), resetTimer);
     timer1.start(1000);
-    timer2.start(1000);
+}
+
+
+
+void TimerView::resizeEvent(QResizeEvent *event) {
+    QWidget::resizeEvent(event);
+    QPixmap scaledPixmap = originalPixmap.scaled(imageLabel->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    imageLabel->setPixmap(scaledPixmap);
 }
 
 void TimerView::updateTimer1() {
     ++timer1Count;
-    timer1Label.setText(QString::number(timer1Count));
+    timer1Label.setText(formatTime(timer1Count));
 }
 
-void TimerView::updateTimer2() {
-    ++timer2Count;
-    timer2Label.setText(QString::number(timer2Count));
+QString TimerView::formatTime(int seconds) {
+    int minutes = seconds / 60;
+    int remainingSeconds = seconds % 60;
+    return QString("%1:%2").arg(minutes, 2, 10, QChar('0')).arg(remainingSeconds, 2, 10, QChar('0'));
 }
 
-void TimerView::resetTimer1() {
-    timer1Count = 0;
-    timer1Label.setText("0");
-}
 
-void TimerView::resetTimer2() {
-    timer2Count = 0;
-    timer2Label.setText("0");
-}
 
-void TimerView::handleCustomEvent(int eventType) {
-    switch (eventType) {
-        case 1:
-            resetTimer1();
-            break;
-        case 2:
-            resetTimer2();
-            break;
-        default:
-            break;
-    }
-}

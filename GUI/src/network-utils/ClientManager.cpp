@@ -16,9 +16,14 @@
 
 
 
-void ClientManager::subscribe(const std::string& field, CallbackFunction callback) {
-    subscriptions[field].append(callback);
+void ClientManager::subscribe(const std::string& field, CallbackFunction<QString> callback) {
+    subscriptionsStrings[field].append(callback);
 }
+
+void ClientManager::subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) {
+    subscriptionsJson[field].append(callback);
+}
+
 
 void ClientManager::handleReceivedData(const QString& data) {
     QJsonParseError error;
@@ -31,12 +36,21 @@ void ClientManager::handleReceivedData(const QString& data) {
     notifyChildrenFields(doc.object());
 }
 
+
+
 void ClientManager::notifyChildrenFields(const QJsonObject& localObject) {
     for (auto it = localObject.constBegin(); it != localObject.constEnd(); ++it) {
        
-        const QVector<CallbackFunction>& callbacks = subscriptions.value(it.key().toStdString());
+        const QVector<CallbackFunction<QString>>& callbacksStrings = subscriptionsStrings.value(it.key().toStdString());
+        const QVector<CallbackFunction<QJsonValue>>& callbacksJson = subscriptionsJson.value(it.key().toStdString());
 
         const QJsonValue& value = it.value();
+        for (const auto& callback: callbacksJson) {
+            callback(value);
+        }
+        
+        
+
         if (value.isObject()) {
             notifyChildrenFields(value.toObject());
         } else if (value.isArray()) {
@@ -44,15 +58,25 @@ void ClientManager::notifyChildrenFields(const QJsonObject& localObject) {
             for (const QJsonValue& element : array) {
                 if (element.isObject()) {
                     notifyChildrenFields(element.toObject());
-                } else {
-                    std::cout << element.toVariant().toString().toStdString() << std::endl;
-                }
+                } 
             }
         } else {
 
-            for (const auto& callback : callbacks) {
+            for (const auto& callback : callbacksStrings) {
                 callback(value.toVariant().toString());     
             }
         }
     }
+}
+
+void ClientManager::send(const QString& data) {
+    // send command "serialNameUsed", "serialStatus" 
+    handleReceivedData(QString(R"({
+        "AV": {
+            "serialNameUsed": "-",
+            "serialStatus" : "close",
+            "dataField": "data"
+            }
+        }
+    )"));
 }
