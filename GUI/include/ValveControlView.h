@@ -32,7 +32,7 @@ protected:
 
 private:
     void setSvgBackground(const QString& filePath);
-    void addButtonIcon(float x, float y, ValveButton::Orientation orientation = ValveButton::Orientation::Vertical);
+    void addButtonIcon(QString name,float x, float y, ValveButton::Orientation orientation = ValveButton::Orientation::Vertical);
     void addDataLabel(const QString& field, float x, float y);
     void placeValves();
     void placeDataLabels();

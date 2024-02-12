@@ -10,6 +10,7 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QDebug>
+#include<unistd.h> 
 
 #include "ClientManager.h"
 
@@ -75,8 +76,33 @@ void ClientManager::send(const QString& data) {
         "AV": {
             "serialNameUsed": "-",
             "serialStatus" : "close",
-            "dataField": "data"
+            "dataField": "data",
+           
+            "togglebutton1": "unknown"
+            }
+        })"));
+    sleep(3);
+    if (p) {
+        handleReceivedData(QString(R"({
+        "AV": {
+            "serialNameUsed": "-",
+            "serialStatus" : "close",
+            "dataField": "data",
+            "togglebutton1": "open"
             }
         }
     )"));
+    } else {
+        handleReceivedData(QString(R"({
+        "AV": {
+            "serialNameUsed": "-",
+            "serialStatus" : "open",
+            "dataField": "data",
+           "togglebutton1": "close"
+            }
+        }
+    )"));
+    }
+    p = !p;
+    
 }

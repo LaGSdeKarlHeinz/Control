@@ -1,4 +1,3 @@
-#include <iostream>
 
 #include <QHBoxLayout>
 #include <QPixmap>
@@ -90,8 +89,11 @@ ValveControlButton::ValveControlButton(const QString &title, QWidget *parent) : 
     font.setPointSize(10);
     font.setBold(true);
     titleLabel->setFont(font);
-
-    toggleButton = new ToggleButton(this);
+    QString str = title;
+    str = str.remove(' ');
+    str = str.toLower();
+    
+    toggleButton = new ToggleButton(str, this);
     refreshLabel = new CLickableIcon(":/icons/refresh-icon.png", this);
 
 

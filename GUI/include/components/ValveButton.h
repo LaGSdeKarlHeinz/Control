@@ -21,6 +21,7 @@ public:
 
     explicit ValveButton(Orientation orientation = Horizontal, QWidget *parent = nullptr);
     void resetStyle();
+    State getState();
     void setState(State state);
 
 signals:

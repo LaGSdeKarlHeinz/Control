@@ -49,7 +49,7 @@ QHBoxLayout* MainWindow::createSectionsLayout() {
     QMap<std::string, QMap<std::string, std::vector<std::string>>> controlMap;
 
     // Populate the QMap with key-value pairs
-    valvesMap.insert("Engine Valves", {"test 5", "test 6", "test 7", "test 8", "test 9"});
+    valvesMap.insert("Engine Valves", {"Toggle Button 1", "test 6", "test 7", "test 8", "test 9"});
     valvesMap.insert("GSE Valves", {"test 1", "test 2", "test 3", "test 4"});
     
     pushButtonMap.insert("Command", {"Command 1", "Command 2", "Command 3"});

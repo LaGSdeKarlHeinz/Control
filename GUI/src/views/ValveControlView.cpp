@@ -7,6 +7,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <thread>
 
 #include <QPushButton>
 #include <QPainter>
@@ -17,6 +18,7 @@
 #include "components/ValveButton.h"
 #include "components/DraggableButton.h"
 #include "components/DataLabel.h"
+#include "MainWindow.h"
 
 
 
@@ -35,22 +37,22 @@ ValveControlView::ValveControlView(QWidget *parent) : QFrame(parent), background
 void ValveControlView::placeValves() {
     
     // GSE Valves
-    addButtonIcon(0.224152, 0.463284);
-    addButtonIcon(0.226, 0.55);
-    addButtonIcon(0.226, 0.635, ValveButton::Orientation::Horizontal);
+    addButtonIcon("Toggle Button 1", 0.224152, 0.463284);
+    addButtonIcon("Toggle Button", 0.226, 0.55);
+    addButtonIcon("Toggle Button", 0.226, 0.635, ValveButton::Orientation::Horizontal);
 
     //Vent Valves
-    addButtonIcon(0.605, 0.3825, ValveButton::Orientation::Horizontal);
-    addButtonIcon(0.925, 0.3825, ValveButton::Orientation::Horizontal);
+    addButtonIcon("Toggle Button", 0.605, 0.3825, ValveButton::Orientation::Horizontal);
+    addButtonIcon("Toggle Button", 0.925, 0.3825, ValveButton::Orientation::Horizontal);
     // Pressure Valves
-    addButtonIcon(0.7025, 0.297, ValveButton::Orientation::Vertical);
-    addButtonIcon(0.8218, 0.297, ValveButton::Orientation::Vertical);
+    addButtonIcon("Toggle Button", 0.7025, 0.297, ValveButton::Orientation::Vertical);
+    addButtonIcon("Toggle Button", 0.8218, 0.297, ValveButton::Orientation::Vertical);
     // Engine valves
-    addButtonIcon(0.717, 0.66555, ValveButton::Orientation::Horizontal);
-    addButtonIcon(0.8072, 0.66555, ValveButton::Orientation::Horizontal);
+    addButtonIcon("Toggle Button", 0.717, 0.66555, ValveButton::Orientation::Horizontal);
+    addButtonIcon("Toggle Button", 0.8072, 0.66555, ValveButton::Orientation::Horizontal);
     // Active Cooling valves
-    addButtonIcon(0.6775, 0.725, ValveButton::Orientation::Vertical);
-    addButtonIcon(0.84305, 0.725, ValveButton::Orientation::Vertical);
+    addButtonIcon("Toggle Button", 0.6775, 0.725, ValveButton::Orientation::Vertical);
+    addButtonIcon("Toggle Button", 0.84305, 0.725, ValveButton::Orientation::Vertical);
 
 }
 
@@ -129,9 +131,28 @@ void ValveControlView::setSvgBackground(const QString& filePath) {
     backgroundImage = std::make_unique<QPixmap>(filePath);
 }
 
-void ValveControlView::addButtonIcon(float x, float y, ValveButton::Orientation orientation) {
+void ValveControlView::addButtonIcon(QString name ,float x, float y, ValveButton::Orientation orientation) {
     ValveButton *button = new ValveButton(orientation,this);
-    
+    name = name.toLower();
+    name = name.replace(" ", "");
+    MainWindow::clientManager->subscribe(name.toStdString(), [button](const QString& message) {
+        
+        if (message == "open") {
+            button->setState(ValveButton::State::Open);
+        } else if (message == "close") {
+            button->setState(ValveButton::State::Close);
+        } else {
+            button->setState(ValveButton::State::Unknown);
+        }
+    });
+
+    connect(button, &ValveButton::clicked, [button]() {
+        if (button->getState() == ValveButton::State::Close) {
+            std::thread([=]() { MainWindow::clientManager->send("command");   }).detach();
+        } else {
+            std::thread([=]() { MainWindow::clientManager->send("command");   }).detach();
+        }
+    });
     addComponent(button, x, y);
  
     //update(); // Trigger repaint to draw the new icon

@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
 # Find the required Qt6 components
-find_package(Qt6 COMPONENTS Widgets Core Network Svg REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Core Network Svg Concurrent REQUIRED)
 
 # Add your source files
 set(SOURCES_GUI
@@ -61,4 +61,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
                         Qt6::Core
                         Qt6::Network
                         Qt6::Svg
+                        Qt6::Concurrent
                         )

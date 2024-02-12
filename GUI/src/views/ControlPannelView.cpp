@@ -38,44 +38,13 @@ ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std:
 
     ValveControlButton *l = new ValveControlButton("Valve 1");
 
-    connect(l, &ValveControlButton::refreshClicked, this, [=]() {
-    // Call the desired function here
-        std::cout << "clicked refresh" << std::endl;
-        
-    });
-    connect(l, &ValveControlButton::valveToggled, this, [=](bool check) {
-    // Call the desired function here
-        std::cout << "toggle valve" << std::endl;
-        std::cout << check << std::endl;
-    });
+ 
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(expandButton, 1, Qt::AlignCenter); 
     layout->addWidget(controlContainerWidget, 1, Qt::AlignCenter);
     layout->setSpacing(0);
     layout->setContentsMargins(0, 0, 0, 0);
-
-  /*
-    QVBoxLayout *gseControlLayout = new QVBoxLayout;
-    QLabel *gseTitle = new QLabel("GSE Valves");
-    gseTitle->setStyleSheet(QString("color:%1").arg(col::primary));
-    gseControlLayout->addWidget(gseTitle, 1, Qt::AlignLeft);
-
-    QGridLayout *gseGridLayout = new QGridLayout;
-    std::vector<std::string> v = {"test 1", "test 2", "test 3", "test 4"};
-    createValveControlButtons(gseGridLayout, v, 2);
-    gseControlLayout->addLayout(gseGridLayout, 4);
-
-    QVBoxLayout *propControlLayout = new QVBoxLayout;
-    QLabel *propTitle = new QLabel("Engine Valves");
-    propTitle->setStyleSheet(QString("color:%1").arg(col::primary));
-    propControlLayout->addWidget(propTitle, 1, Qt::AlignLeft);
-
-    QGridLayout *propGridLayout = new QGridLayout;
-    std::vector<std::string> v = {"test 1", "test 2", "test 3", "test 4"};
-    createValveControlButtons(propGridLayout, v, 2);
-    propControlLayout->addLayout(propGridLayout, 4);
-    */
    
     
     QHBoxLayout *containerLayout = new QHBoxLayout(controlContainerWidget);

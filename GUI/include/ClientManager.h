@@ -33,7 +33,7 @@ private:
     QMap<std::string, QVector<CallbackFunction<QString>>> subscriptionsStrings;
     QMap<std::string, QVector<CallbackFunction<QJsonValue>>> subscriptionsJson;
 
-    
+    bool p = false;
     
     
 

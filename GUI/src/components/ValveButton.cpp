@@ -1,3 +1,6 @@
+#include <iostream>
+#include<unistd.h> 
+
 #include <QIcon>
 #include <QLabel>
 #include <QMouseEvent>
@@ -47,32 +50,39 @@ void ValveButton::updateButtonIcon() {
     QPixmap newPixmap;
     switch (currentState)
     {
-    case Open:
-        if (orientation == Horizontal) {
-            newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(90));
-            break;
-        }
-        newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(0));
-        break;
-    case Close: 
-        if (orientation == Horizontal) {
+        case Open:
+            if (orientation == Horizontal) {
+                newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(90));
+                break;
+            }
             newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(0));
             break;
-        }
-        newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(90));
-        break;
-    case Unknown: 
-        newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(180));
-        break;
+        case Close: 
+            if (orientation == Horizontal) {
+                newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(0));
+                break;
+            }
+            newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(90));
+            break;
+        case Unknown: 
+            newPixmap = icon.pixmap(iconSize).transformed(transform.rotate(180));
+            break;
     } 
     setPixmap(newPixmap);
+   
     
+    update();
 }
 
+ValveButton::State ValveButton::getState() {
+    return currentState;
+}
 
 void ValveButton::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
+        emit clicked();
+      
         setStyleSheet(QString(R"(
             #valveButton {
                 background:transparent;
@@ -83,18 +93,13 @@ void ValveButton::mousePressEvent(QMouseEvent *event)
             }
             
         )"));
+        
         QTimer::singleShot(100,  [this]() {
             this->resetStyle();
         });
-        emit clicked();
-
-        if (currentState == Open) {
-            setState(Unknown);
-        } else if (currentState == Unknown) {
-            setState(Close);
-        } else {
-            setState(Open);
-        }
+        
+        
+       
 }
 
 void ValveButton::resetStyle() {
