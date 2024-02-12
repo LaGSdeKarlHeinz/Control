@@ -38,3 +38,4 @@ build
 /GUI/build
 /Servers/build
 /.vscode
+/GUI/Log/
