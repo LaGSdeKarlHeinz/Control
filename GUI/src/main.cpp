@@ -11,6 +11,7 @@
 
 #include "MainWindow.h"
 #include "ClientManager.h"
+#include "Setup.h"
 #include <QTimer>
 #include <QtNetwork/QTcpSocket>
 
@@ -18,37 +19,12 @@ void fakeDataHandling();
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
-
-
-
-    // Create a TCP socket
-    QTcpSocket socket;
-
-    // Connect to the server
-    socket.connectToHost("127.0.0.1", 12345); // Assuming the server is running on localhost (127.0.0.1) and listening on port 12345
-
-    std::cout << "check connection" << std::endl;
-    if (socket.waitForConnected()) {
-        std::cout << "connected" << std::endl;
-
-        // Send data to the server
-        QByteArray data = "Hello, Server!";
-        socket.write(data);
-        socket.flush(); // Ensure that the data is sent immediately
-
-        
-
-        // Close the connection
-        socket.close();
-    } else {
-        qDebug() << "Error: Failed to connect to the server.";
-    }
-    std::cout << "end" << std::endl;
-
-
     QResource::registerResource("../res/resources.rcc");
-  
+
+
+    MainWindow::clientManager = std::make_unique<ClientManager>();    
     MainWindow mainWindow;
+    
     QTimer::singleShot(5000, fakeDataHandling);
     
     mainWindow.show();

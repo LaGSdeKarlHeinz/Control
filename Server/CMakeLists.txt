@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
 # Find the required Qt6 components
-find_package(Qt6 COMPONENTS Widgets Core Network REQUIRED)
+find_package(Qt6 COMPONENTS Widgets Core Network SerialPort  REQUIRED)
 
 set(SOURCES_SERVER
     src/server.cpp
@@ -25,4 +25,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
                         Qt6::Widgets 
                         Qt6::Core
                         Qt6::Network
+                        Qt6::SerialPort
                         )

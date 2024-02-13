@@ -10,12 +10,25 @@
 #include <QJsonValue>
 #include <QJsonArray>
 #include <QDebug>
+#include <QtNetwork/QTcpSocket>
+#include <QObject>
 #include<unistd.h> 
 
 #include "ClientManager.h"
+#include "../Setup.h"
 
 
-
+ClientManager::ClientManager(QObject *parent) : ClientInterface(parent) {
+    
+    socket = new QTcpSocket(this);
+    connect(socket, &QTcpSocket::connected, this, &ClientManager::connected);
+    connect(socket, &QTcpSocket::readyRead, this, &ClientManager::readyRead);
+    connect(socket, &QTcpSocket::disconnected, this, &ClientManager::disconnected);
+    std::cout << "Connecting to server" << std::endl;
+    socket->connectToHost(network::serverIP, network::serverPort);
+    std::cout << "Connected" << std::endl;
+    
+}
 
 void ClientManager::subscribe(const std::string& field, CallbackFunction<QString> callback) {
     subscriptionsStrings[field].append(callback);

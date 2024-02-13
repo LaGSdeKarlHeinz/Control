@@ -9,9 +9,12 @@
 
 #include <functional>
 #include <QString>
+#include <QObject>
 
-class ClientInterface {
+class ClientInterface : public QObject {
+    Q_OBJECT
 public:
+    ClientInterface(QObject *parent = nullptr) : QObject(parent) {};
     virtual ~ClientInterface() = default;
 
     template<typename T>

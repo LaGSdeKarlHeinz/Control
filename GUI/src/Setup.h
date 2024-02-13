@@ -37,7 +37,10 @@ namespace mws {
     const int sideWidth = (100-middleSectionWidth)/2;
 } // namespace mws
 
-
+namespace network {
+    const QString serverIP = "127.0.0.1";
+    const int serverPort = 12345;
+}
 // ----------------------------- Colour ----------------------------------------
 namespace col {
     inline QString backgroundColorCode = "#161A36"; 

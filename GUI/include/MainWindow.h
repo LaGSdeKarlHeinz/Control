@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow {
 public:
     MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow() {};
-    inline const static std::unique_ptr<ClientManager> clientManager = std::make_unique<ClientManager>();
+    inline static std::unique_ptr<ClientManager> clientManager;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
