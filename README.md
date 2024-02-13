@@ -26,3 +26,29 @@ when adding stuff to res make sure to compile the qrc with the following command
 # Installation 
 
 QTSvg : sudo apt-get -y install libqt6svg6-dev
+
+Rcc command : fedora : sudo dnf install qt-devel
+
+# Communication structure 
+
+```
+communication from client to server :
+{
+    header: post | get | internal,
+    payload: {
+        source : <client-ip>,
+        args*...
+    }
+}
+
+communication from sever to client :
+{
+    header: post | get | internal,
+    payload: {
+        source : GSE | AV,
+        args*...
+    }
+}
+```
+get :                                        
+    getSerialStatus => response = "serialNameUsed", "serialStatus" (fields expected)

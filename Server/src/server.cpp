@@ -1,4 +1,5 @@
 #include "Server.h"
+#include <iostream>
 
 Server::Server(QObject *parent) : QTcpServer(parent) {
 }
@@ -13,7 +14,7 @@ void Server::incomingConnection(qintptr socketDescriptor) {
 
     clients.append(client);
 
-    qDebug() << "Client connected: " << socketDescriptor;
+    std::cout << "Client connected: " << socketDescriptor << std::endl;
 }
 
 
@@ -23,8 +24,10 @@ void Server::readyRead() {
 
     while (senderSocket->bytesAvailable() > 0) {
         QByteArray data = senderSocket->readAll();
+        QString dataString = QString::fromUtf8(data);
+
         // Process the received data as needed
-        qDebug() << "Received data: " << data;
+        std::cout << "Received data: " << dataString.toStdString() << std::endl;
     }
 }
 
