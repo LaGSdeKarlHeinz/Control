@@ -19,6 +19,7 @@ set(SOURCES_GUI
     src/components/ValveControlButton.cpp
     src/json/jsoncpp.cpp
     src/network-utils/ClientManager.cpp
+    src/network-utils/RequestBuilder.cpp
     src/views/ControlPannelView.cpp 
     src/views/DataView.cpp
     src/views/GSManagerView.cpp
@@ -45,6 +46,7 @@ set(HEADERS_GUI
     include/DataView.h
     include/GSManagerView.h
     include/MainWindow.h
+    include/RequestBuilder.h
     include/SerialView.h
     include/TelemetryView.h
     include/TimerView.h    

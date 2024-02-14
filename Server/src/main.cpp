@@ -5,6 +5,9 @@
 #include <QtSerialPort/QSerialPort>
 
 #include "Server.h"
+#include "../ERT_RF_Protocol_Interface/PacketDefinition.h"
+
+
 
 int main(int argc, char *argv[]) {
     QCoreApplication a(argc, argv);
@@ -18,6 +21,8 @@ int main(int argc, char *argv[]) {
     } else {
         std::cout << "Error: Failed to start server. Check if the port is already in use or permissions issue." <<std::endl;      
     }
+
+
 
     QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
     std::cout << "found " << availablePorts.size() << " devices" << std::endl;

@@ -3,6 +3,12 @@
 
 #include <QtNetwork/QTcpServer>
 #include <QtNetwork/QTcpSocket>
+#include <QtSerialPort/QSerialPort>
+#include <QMap>
+
+
+#include "RequestHandler.h"
+#include "../Capsule/src/capsule.h"
 
 class Server : public QTcpServer {
     Q_OBJECT
@@ -10,7 +16,8 @@ class Server : public QTcpServer {
 public:
     Server(QObject *parent = nullptr);
     void sendToAllClients(const QByteArray &data);
-
+    void handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len);
+    
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 
@@ -19,7 +26,23 @@ private slots:
     void disconnected();
 
 private:
+
+    void receiveSubscribe(const QJsonObject &request,  QTcpSocket *senderSocket);
+    void receiveUnsubscribe(const QJsonObject &request,  QTcpSocket *senderSocket);
+    void receivePost(const QJsonObject &request,  QTcpSocket *senderSocket);
+    void receiveGet(const QJsonObject &request,  QTcpSocket *senderSocket);
+    void receiveSerialData();
+    void serialError();
+    void openSerialPort();
+    void updateSubscriptions(const QJsonObject &newData);
+
+    QMap<QString, QList<QTcpSocket *>> subscriptionMap;
     QList<QTcpSocket *> clients;
+
+    
+    QSerialPort *serialPort;
+    RequestHandler requestHandler;
+    Capsule<Server> capsule;
 };
 
 #endif /* SERVER_H */

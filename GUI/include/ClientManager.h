@@ -37,11 +37,7 @@ private slots:
         std::cout << "Connected to server" << std::endl;
     }
 
-    void readyRead() {
-        // Handle incoming data from the server
-        QByteArray data = socket->readAll();
-        qDebug() << "Received data: " << data;
-    }
+    void readyRead();
 
     void disconnected() {
         qDebug() << "Disconnected from the server";
@@ -55,7 +51,7 @@ private:
     bool p = false;
     QTcpSocket *socket;
     
-
+    QJsonObject jsonFromString(const QString& data);
     // void notifyChildrenFields(Json::Value local_root); const QJsonObject& localObject
     void notifyChildrenFields(const QJsonObject& localObject);
 };

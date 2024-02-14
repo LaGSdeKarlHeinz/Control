@@ -29,7 +29,9 @@ QTSvg : sudo apt-get -y install libqt6svg6-dev
 
 Rcc command : fedora : sudo dnf install qt-devel
 
-SerialPort : ubuntun : sudo apt-get install libqt5serialport5-dev
+SerialPort : ubuntu : sudo apt-get install libqt5serialport5-dev
+
+Boost : ubuntu : sudo apt install libboost-all-dev
 
 # Communication structure 
 
