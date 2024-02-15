@@ -121,7 +121,7 @@ void Server::readyRead() {
                 "%1": "new data from server"
             }
         }
-    )").arg("data");
+        )").arg("data");
         
         for (QTcpSocket *subscribedSocket : subscriptionMap["data"]) {
          
@@ -151,12 +151,40 @@ void Server::sendToAllClients(const QByteArray &data) {
 
 
 void Server::updateSubscriptions(const QJsonObject &newData) {
-    
-    for (QTcpSocket *subscribedSocket : subscriptionMap["data"]) {
-        QJsonDocument doc(newData);
-        subscribedSocket->write(QString(QJsonDocument(newData).toJson()).toUtf8());
-        subscribedSocket->flush();
+
+
+    for (auto it = newData.constBegin(); it != newData.constEnd(); ++it) {
+       
+        const QList<QTcpSocket *> sockets = subscriptionMap.value(it.key());  
+
+        const QJsonValue& value = it.value();
+        RequestBuilder rBuilder;
+        rBuilder.setHeader(RequestType::POST); 
+
+        if (value.isObject()) {
+            updateSubscriptions(value.toObject());
+            for (QTcpSocket *socket: sockets) {
+                rBuilder.addField(it.key(), QString(QJsonDocument(value.toObject()).toJson()));
+                socket->write(rBuilder.toString().toUtf8());
+                socket->flush();
+            }
+        } else if (value.isArray()) {
+            const QJsonArray array = value.toArray();
+            for (const QJsonValue& element : array) {
+                if (element.isObject()) {
+                    updateSubscriptions(element.toObject());
+                } 
+            }
+        } else {
+            for (QTcpSocket *socket: sockets) {
+                rBuilder.addField(it.key(), value.toString());
+                socket->write(rBuilder.toString().toUtf8());
+                socket->flush();
+            }
+        }
     }
+
+
 }
 
 void Server::handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len) {
@@ -213,8 +241,27 @@ void Server::handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len)
         }
         case CAPSULE_ID::GSE_TELEMETRY: {
             
-            
+            PacketGSE_downlink data;
 
+            // Create a JSON object
+            QJsonObject jsonObj;
+
+            // Add primitive data members to JSON object
+            jsonObj["tankPressure"] = static_cast<double>(data.tankPressure);
+            jsonObj["tankTemperature"] = static_cast<double>(data.tankTemperature);
+            jsonObj["fillingPressure"] = static_cast<double>(data.fillingPressure);
+            jsonObj["disconnectActive"] = data.disconnectActive;
+            jsonObj["loadcellRaw"] = static_cast<int>(data.loadcellRaw);
+
+            // Create a sub-object for status
+            QJsonObject statusObj;
+            statusObj["fillingN2O"] = static_cast<int>(data.status.fillingN2O);
+            statusObj["vent"] = static_cast<int>(data.status.vent);
+
+            // Add the sub-object to the main JSON object
+            jsonObj["status"] = statusObj;
+
+            updateSubscriptions(jsonObj);
             break;
         }
         default:
