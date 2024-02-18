@@ -30,6 +30,7 @@ public:
     void subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) override;
     void handleReceivedData(const QString& data) override;
     void send(const QString& data) override;
+    void sendSubscribeRequest(const QString& field);
     
 
 private slots:
@@ -40,7 +41,7 @@ private slots:
     void readyRead();
 
     void disconnected() {
-        qDebug() << "Disconnected from the server";
+         std::cout << "Disconnected from the server" << std::endl;
     }
 
 

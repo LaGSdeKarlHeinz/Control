@@ -30,7 +30,7 @@ ValveControlView::ValveControlView(QWidget *parent) : QFrame(parent), background
     placeValves();
     placeCommandButtons();
     placeDataLabels();
-    DraggableButton *dButton = new DraggableButton(this);
+    // DraggableButton *dButton = new DraggableButton(this);
     
 }
 

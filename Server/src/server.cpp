@@ -19,6 +19,7 @@ Server::Server(QObject *parent) : QTcpServer(parent), requestHandler(this), seri
     connect(serialPort, &QSerialPort::readyRead, this, &Server::receiveSerialData);
     connect(serialPort, &QSerialPort::errorOccurred, this, &Server::serialError);
 
+
     openSerialPort();
 }
 
@@ -26,6 +27,7 @@ Server::Server(QObject *parent) : QTcpServer(parent), requestHandler(this), seri
 
 void Server::openSerialPort() {
     int ctr = 0;
+    serialPort->setBaudRate(QSerialPort::Baud115200);
     QString serial_port_name = "";
     if (!serialPort->isOpen()) {
         do {
@@ -68,7 +70,7 @@ void Server::incomingConnection(qintptr socketDescriptor) {
     connect(client, &QTcpSocket::disconnected, this, &Server::disconnected);
 
     clients.append(client);
-
+    
     std::cout << "Client connected: " << socketDescriptor << std::endl;
 }
 
@@ -76,7 +78,7 @@ void Server::receiveSubscribe(const QJsonObject &request,  QTcpSocket *senderSoc
     // Handle the subscribe request
     QString field = request.value("payload").toObject().value("field").toString();
     std::cout << "socket: " << senderSocket << std::endl;
-    subscriptionMap["data"].append(senderSocket);
+    subscriptionMap[field].append(senderSocket);
     std::cout << "Subscribed to: " << field.toStdString() << std::endl; 
 }
 
@@ -114,19 +116,7 @@ void Server::readyRead() {
         requestHandler.handleRequest(dataString, senderSocket);
         // Process the received data as needed
         std::cout << "Received data: " << dataString.toStdString() << std::endl;
-        QString d = QString(R"(
-        {
-            "header": "post",
-            "payload": {
-                "%1": "new data from server"
-            }
-        }
-        )").arg("data");
         
-        for (QTcpSocket *subscribedSocket : subscriptionMap["data"]) {
-         
-            subscribedSocket->write(d.toUtf8());
-        }
         
     }
 }
@@ -151,12 +141,17 @@ void Server::sendToAllClients(const QByteArray &data) {
 
 
 void Server::updateSubscriptions(const QJsonObject &newData) {
-
+    
 
     for (auto it = newData.constBegin(); it != newData.constEnd(); ++it) {
        
         const QList<QTcpSocket *> sockets = subscriptionMap.value(it.key());  
-
+        if (it.key() == "packet_nbr") {
+            std::cout << "packet_nbr: " << std::endl;
+            if (sockets.size() > 0) {
+                std::cout << "socket: " << sockets.first() << std::endl;
+            }
+        }
         const QJsonValue& value = it.value();
         RequestBuilder rBuilder;
         rBuilder.setHeader(RequestType::POST); 
@@ -177,6 +172,8 @@ void Server::updateSubscriptions(const QJsonObject &newData) {
             }
         } else {
             for (QTcpSocket *socket: sockets) {
+                std::cout << "updated subscriptions" << std::endl;
+                std::cout << "----------------------" << std::endl;
                 rBuilder.addField(it.key(), value.toString());
                 socket->write(rBuilder.toString().toUtf8());
                 socket->flush();
@@ -203,9 +200,10 @@ void Server::handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len)
             
              // Create a JSON object
             QJsonObject jsonObj;
-
+            
             // Iterate over struct members and add them to the JSON object
-            jsonObj["packet_nbr"] = static_cast<int>(data.packet_nbr);
+            jsonObj["av_state"] = static_cast<int>(data.av_state);
+            jsonObj["packet_nbr"] = QString::number(static_cast<int>(data.packet_nbr));
             jsonObj["timestamp"] = static_cast<int>(data.timestamp);
             jsonObj["gnss_lon"] = static_cast<double>(data.gnss_lon);
             jsonObj["gnss_lat"] = static_cast<double>(data.gnss_lat);
@@ -223,7 +221,7 @@ void Server::handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len)
             jsonObj["igniter_pressure"] = static_cast<double>(data.igniter_pressure);
             jsonObj["LOX_inj_pressure"] = static_cast<double>(data.LOX_inj_pressure);
             jsonObj["fuel_inj_pressure"] = static_cast<double>(data.fuel_inj_pressure);
-            jsonObj["chamber_pressure"] = static_cast<double>(data.chamber_pressure);
+            jsonObj["chamber_pressure"] = QString::number(static_cast<double>(data.chamber_pressure));
 
             // Create a sub-object for engine_state_t
             QJsonObject engineStateObj;

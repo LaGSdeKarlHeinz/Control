@@ -15,17 +15,25 @@
 #include<unistd.h> 
 
 #include "ClientManager.h"
+#include "RequestBuilder.h"
 #include "../Setup.h"
 
 
 ClientManager::ClientManager(QObject *parent) : ClientInterface(parent) {
     
     socket = new QTcpSocket(this);
+    
+    
     connect(socket, &QTcpSocket::connected, this, &ClientManager::connected);
     connect(socket, &QTcpSocket::readyRead, this, &ClientManager::readyRead);
     connect(socket, &QTcpSocket::disconnected, this, &ClientManager::disconnected);
 
     socket->connectToHost(network::serverIP, network::serverPort);
+    if (!socket->waitForConnected(3000)) {
+        std::cout << "Error: " << socket->errorString().toStdString() << std::endl;
+    }
+  
+    
     
 }
 
@@ -39,11 +47,30 @@ void ClientManager::readyRead() {
 
 
 void ClientManager::subscribe(const std::string& field, CallbackFunction<QString> callback) {
+    if (subscriptionsStrings[field].size() == 0) 
+        sendSubscribeRequest(QString::fromStdString(field));
     subscriptionsStrings[field].append(callback);
+    
+}
+
+void ClientManager::sendSubscribeRequest(const QString& field) {
+    
+    RequestBuilder builder;
+    builder.setHeader(RequestType::SUBSCRIBE);
+    builder.addField("field", field);
+    // socket->waitForReadyRead();
+    socket->write(builder.toString().toUtf8());
+    
+    socket->flush();
+    socket->waitForBytesWritten();
+    
 }
 
 void ClientManager::subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) {
+    if (subscriptionsJson[field].size() == 0) 
+        sendSubscribeRequest(QString::fromStdString(field));
     subscriptionsJson[field].append(callback);
+    
 }
 
 
@@ -114,6 +141,7 @@ void ClientManager::send(const QString& data) {
             }
         })");
         socket->write(con2.toUtf8());
+        socket->flush();
     }
     
     handleReceivedData(QString(R"({

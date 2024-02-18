@@ -29,15 +29,6 @@ int main(int argc, char *argv[]) {
     
     QTimer::singleShot(5000, fakeDataHandling);
     
-    RequestBuilder builder = RequestBuilder();
-    builder.setHeader(RequestType::INTERNAL)
-            .addField("test", "data received!");
-    QJsonDocument doc(builder.build());
-
-
-    std::cout << builder.toString().toStdString() << std::endl;
-    MainWindow::clientManager->send(builder.toString());
-
     mainWindow.show();
     return app.exec();
 }

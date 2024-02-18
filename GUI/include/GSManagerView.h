@@ -20,7 +20,7 @@ private:
     void setupTimersSection();
     std::function<void(const QString)> setDownRange = [this](const QString newText) { downRange->setText(newText); };
     std::function<void(const QString)> setPacketNumber = [this](const QString newText) { 
-        setInfoChildrenStyle(packetNumber, 27, false);
+        // setInfoChildrenStyle(packetNumber, 27, false);
         packetNumber->setText(newText); 
         };
     void setInfoChildrenStyle(QFrame *child, int fontSize, bool isBold);

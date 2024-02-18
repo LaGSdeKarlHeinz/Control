@@ -147,8 +147,8 @@ void GSManagerView::setupTimersSection() {
 }
 
 void GSManagerView::setupConnections() {
-    MainWindow::clientManager->subscribe("downrange", setDownRange);
-    MainWindow::clientManager->subscribe("packetNumber", setPacketNumber);
+    MainWindow::clientManager->subscribe("test1234", setDownRange);
+    MainWindow::clientManager->subscribe("chamber_pressure", setPacketNumber);
     
 }
 
