@@ -38,6 +38,7 @@ jobs:
 
     - name: Append test results to README
       run: |
-        pwd
         echo '\nTest results:' >> README.md
         cat build/test_results.txt >> README.md
+    - name: Debug README.md contents
+      run: cat README.md
