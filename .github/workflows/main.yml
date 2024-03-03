@@ -22,6 +22,10 @@ jobs:
       run: |
         sudo apt-get install -y cmake
 
+    - name: Initialize submodules
+      run: git submodule update --init --recursive
+
+
     - name: Configure and build project
       run: |
         cmake -S GUI -B build
