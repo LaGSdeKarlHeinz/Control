@@ -16,7 +16,7 @@ jobs:
     - name: Install Qt6 dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y qt6-default qtbase6-dev qt6-svg qt6-network qt6-concurrent
+        sudo apt-get install -y qt6-base-dev-tools qt6-base-dev libqt6svg6-dev libqt5serialport5-dev libgtest-dev
 
     - name: Install CMake
       run: |
