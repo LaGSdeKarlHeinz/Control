@@ -3,7 +3,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - firehorn/dev/maxime
 
 jobs:
   build-and-test:
