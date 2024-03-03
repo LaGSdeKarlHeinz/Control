@@ -119,26 +119,33 @@ void Server::readyRead() {
     while (senderSocket->bytesAvailable() > 0) {
         QByteArray data = senderSocket->readAll();
         QString dataString = QString::fromUtf8(data);
-        requestHandler.handleRequest(dataString, senderSocket);
+        QString jsonString(dataString);
+
+        // Split the string by '}{'
+        QStringList jsonStrings = jsonString.split("}{");
+        for (const QString &jsonStr : jsonStrings) {
+        
+            requestHandler.handleRequest(jsonStr, senderSocket);
+            
+        }
+
         // Process the received data as needed
-        std::cout << "Received data: " << dataString.toStdString() << std::endl;
-        QString d = QString(R"(
-        {
-            "header": "post",
-            "payload": {
-                "%1": "new data from server"
-            }
-        }
-        )").arg("data");
+        // std::cout << "Received data: " << dataString.toStdString() << std::endl;
+        // QString d = QString(R"(
+        // {
+        //     "header": "post",
+        //     "payload": {
+        //         "%1": "new data from server"
+        //     }
+        // }
+        // )").arg("data");
         
-        for (QTcpSocket *subscribedSocket : subscriptionMap[0]) {
+        // for (QTcpSocket *subscribedSocket : subscriptionMap[0]) {
          
-            subscribedSocket->write(d.toUtf8());
-        }
-        
+        //     subscribedSocket->write(d.toUtf8());
+        // }
     }
 }
-
 
 
 void Server::disconnected() {

@@ -44,8 +44,7 @@ void ClientManager::readyRead() {
         // Handle incoming data from the server
         
         QByteArray data = socket->readAll();
-        
-        // std::cout << "Received data: " << data.toStdString() << std::endl;
+        std::cout << "Received data: " << data.toStdString() << std::endl;
         handleReceivedData(QString::fromUtf8(data));
     }
 

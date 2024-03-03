@@ -33,6 +33,8 @@ SerialPort : ubuntu : sudo apt-get install libqt5serialport5-dev
 
 Boost : ubuntu : sudo apt install libboost-all-dev
 
+install gtest : sudo apt-get install libgtest-dev
+
 # Communication structure 
 
 ```
@@ -56,3 +58,5 @@ communication from sever to client :
 ```
 get :                                        
     getSerialStatus => response = "serialNameUsed", "serialStatus" (fields expected)
+
+
