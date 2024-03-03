@@ -40,4 +40,4 @@ jobs:
       run: |
         pwd
         echo '\nTest results:' >> README.md
-        cat test_results.txt >> README.md
+        cat build/test_results.txt >> README.md
