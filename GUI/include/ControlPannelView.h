@@ -13,11 +13,13 @@
 #include <QPushButton>
 #include <QGridLayout>
 
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
+
 class ControlPannelView : public QFrame {
     Q_OBJECT
 
 public:
-    ControlPannelView(QWidget *parent = nullptr, QMap<std::string, QMap<std::string, std::vector<std::string>>> *controls = nullptr);
+    ControlPannelView(QWidget *parent = nullptr, QMap<std::string, QMap<std::string, std::vector<GUI_FIELD>>> *controls = nullptr);
     void resizeWidget();
     virtual ~ControlPannelView() {};
 
@@ -30,9 +32,9 @@ private:
     int getHeightPos();
     void setupExpandButton();
     void setupContainerWidget();
-    void createValveControlButtons(QGridLayout *gridLayout, const std::vector<std::string> &strings, int maxColumns);
-    void createValveLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<std::string>> *valves);
-    void createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<std::string>> *buttons);
+    void createValveControlButtons(QGridLayout *gridLayout, const std::vector<GUI_FIELD> &strings, int maxColumns);
+    void createValveLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<GUI_FIELD>> *valves);
+    void createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<GUI_FIELD>> *buttons);
     
     QPixmap buttonPixMap;
     bool toggled;

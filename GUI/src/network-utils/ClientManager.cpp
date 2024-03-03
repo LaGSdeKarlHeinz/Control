@@ -17,6 +17,7 @@
 #include "ClientManager.h"
 #include "RequestBuilder.h"
 #include "../Setup.h"
+#include "RequestBuilder.h"
 
 
 ClientManager::ClientManager(QObject *parent) : ClientInterface(parent) {
@@ -27,6 +28,7 @@ ClientManager::ClientManager(QObject *parent) : ClientInterface(parent) {
     connect(socket, &QTcpSocket::connected, this, &ClientManager::connected);
     connect(socket, &QTcpSocket::readyRead, this, &ClientManager::readyRead);
     connect(socket, &QTcpSocket::disconnected, this, &ClientManager::disconnected);
+
 
     socket->connectToHost(network::serverIP, network::serverPort);
     if (!socket->waitForConnected(3000)) {
@@ -40,15 +42,18 @@ ClientManager::ClientManager(QObject *parent) : ClientInterface(parent) {
 
 void ClientManager::readyRead() {
         // Handle incoming data from the server
+        
         QByteArray data = socket->readAll();
-        std::cout << "Received data: " << data.toStdString() << std::endl;
+        
+        // std::cout << "Received data: " << data.toStdString() << std::endl;
         handleReceivedData(QString::fromUtf8(data));
     }
 
 
-void ClientManager::subscribe(const std::string& field, CallbackFunction<QString> callback) {
+void ClientManager::subscribe(const GUI_FIELD field, CallbackFunction<QString> callback) {
     if (subscriptionsStrings[field].size() == 0) 
-        sendSubscribeRequest(QString::fromStdString(field));
+        sendSubscribeRequest(field);
+    // sendSubscribeRequest(field);
     subscriptionsStrings[field].append(callback);
     
 }
@@ -66,16 +71,58 @@ void ClientManager::sendSubscribeRequest(const QString& field) {
     
 }
 
-void ClientManager::subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) {
+
+    
+void ClientManager::subscribe(const GUI_FIELD field, CallbackFunction<QJsonValue> callback) {
     if (subscriptionsJson[field].size() == 0) 
-        sendSubscribeRequest(QString::fromStdString(field));
+        sendSubscribeRequest(field);
+    // sendSubscribeRequest(field);
     subscriptionsJson[field].append(callback);
     
+
 }
+
+ void ClientManager::sendSubscribeRequest(const GUI_FIELD field){
+    RequestBuilder builder;
+    builder.setHeader(RequestType::SUBSCRIBE);
+    builder.addField("field", field);
+    socket->write(builder.toString().toUtf8());
+    socket->waitForBytesWritten();
+    socket->flush();
+    }
 
 
 void ClientManager::handleReceivedData(const QString& data) {
-    notifyChildrenFields(jsonFromString(data));
+    
+    QString jsonString(data);
+
+    // Split the string by '}{'
+    QStringList jsonStrings = jsonString.split("}{");
+
+    // Process each individual JSON string
+    for (const QString &jsonStr : jsonStrings) {
+        // Add '}' to the end of each string if it's not the last one
+        QString json = jsonStr;
+        if (json != jsonStrings.last()) {
+            json.append("}");
+        }
+
+        // Parse JSON string to JSON object
+        QJsonParseError error;
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(json.toUtf8(), &error);
+        if (error.error != QJsonParseError::NoError) {
+            qWarning() << "Error parsing JSON:" << error.errorString();
+            continue;
+        }
+
+        // Extract payload from JSON object
+        QJsonObject payload = jsonDoc.object()["payload"].toObject();
+        notifyChildrenFields(payload);
+        
+    }
+
+
+    // notifyChildrenFields(jsonFromString(data).value("payload").toObject());
 }
 
 QJsonObject ClientManager::jsonFromString(const QString& data) {
@@ -90,9 +137,9 @@ QJsonObject ClientManager::jsonFromString(const QString& data) {
 
 void ClientManager::notifyChildrenFields(const QJsonObject& localObject) {
     for (auto it = localObject.constBegin(); it != localObject.constEnd(); ++it) {
-       
-        const QVector<CallbackFunction<QString>>& callbacksStrings = subscriptionsStrings.value(it.key().toStdString());
-        const QVector<CallbackFunction<QJsonValue>>& callbacksJson = subscriptionsJson.value(it.key().toStdString());
+        std::cout << (GUI_FIELD)it.key().toInt() << std::endl;
+        const QVector<CallbackFunction<QString>>& callbacksStrings = subscriptionsStrings.value((GUI_FIELD)it.key().toInt());
+        const QVector<CallbackFunction<QJsonValue>>& callbacksJson = subscriptionsJson.value((GUI_FIELD)it.key().toInt());
 
         const QJsonValue& value = it.value();
         for (const auto& callback: callbacksJson) {
@@ -129,51 +176,42 @@ void ClientManager::send(const QString& data) {
         QString con = QString(R"({
             "header": "subscribe",
             "payload":{
-                "field": "data"
+                "field": 27
             }
         })");
-        socket->write(con.toUtf8());
-        socket->waitForBytesWritten();
+        // socket->write(con.toUtf8());
+        // socket->waitForBytesWritten();
         QString con2 = QString(R"({
             "header": "unsubscribe",
             "payload":{
-                "field": "data"
+                "field": "27"
             }
         })");
-        socket->write(con2.toUtf8());
-        socket->flush();
+        // socket->write(con2.toUtf8());
     }
     
     handleReceivedData(QString(R"({
-        "AV": {
-            "serialNameUsed": "-",
-            "serialStatus" : "close",
-            "dataField": "data",
-           
-            "togglebutton1": "unknown"
+            "header": "unsubscribe",
+            "payload":{
+                "3": "unknown",
+                "40": "unknown"
+             }
+        })"));
+    
+    if (p) {
+            handleReceivedData(QString(R"({
+            "header": "unsubscribe",
+            "payload":{
+                "3": "open"
             }
         })"));
-    sleep(3);
-    if (p) {
-        handleReceivedData(QString(R"({
-        "AV": {
-            "serialNameUsed": "-",
-            "serialStatus" : "close",
-            "dataField": "data",
-            "togglebutton1": "open"
-            }
-        }
-    )"));
     } else {
         handleReceivedData(QString(R"({
-        "AV": {
-            "serialNameUsed": "-",
-            "serialStatus" : "open",
-            "dataField": "data",
-           "togglebutton1": "close"
+            "header": "unsubscribe",
+            "payload":{
+                "3": "close"
             }
-        }
-    )"));
+        })"));
     }
     p = !p;
     

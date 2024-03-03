@@ -11,6 +11,8 @@
 #include <QString>
 #include <QObject>
 
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
+
 class ClientInterface : public QObject {
     Q_OBJECT
 public:
@@ -21,8 +23,8 @@ public:
     using CallbackFunction= std::function<void(const T&)>;
     // using CallbackFunction = std::function<void(const QString)>;
     
-    virtual void subscribe(const std::string& field, CallbackFunction<QString> callback) = 0;
-    virtual void subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) = 0;
+    virtual void subscribe(const GUI_FIELD field, CallbackFunction<QString> callback) = 0;
+    virtual void subscribe(const GUI_FIELD field, CallbackFunction<QJsonValue> callback) = 0;
     virtual void handleReceivedData(const QString& data) = 0;
     virtual void send(const QString& data) = 0;
 };

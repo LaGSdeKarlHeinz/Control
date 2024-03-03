@@ -10,7 +10,7 @@
 
 
 
-TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Count(0), timerTitle(title) {
+TimerView::TimerView(QString title, GUI_FIELD field ,QWidget *parent) : QWidget(parent), timer1Count(0), timerTitle(title) {
     QVBoxLayout *layout = new QVBoxLayout(this);
     setObjectName("TimerView");
     
@@ -36,7 +36,7 @@ TimerView::TimerView(QString title, QWidget *parent) : QWidget(parent), timer1Co
     layout->addWidget(&timer1Label, 1, Qt::AlignCenter);
     connect(&timer1, &QTimer::timeout, this, &TimerView::updateTimer1);
     
-    MainWindow::clientManager->subscribe(title.toStdString(), resetTimer);
+    MainWindow::clientManager->subscribe(field, resetTimer);
     timer1.start(1000);
 }
 

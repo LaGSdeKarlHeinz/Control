@@ -8,7 +8,9 @@
 #include <QtConcurrent>
 #include <MainWindow.h>
 
-ToggleButton::ToggleButton(QString fieldSensitivity, QWidget *parent) : QWidget(parent), m_checked(false), m_offset(0)
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
+
+ToggleButton::ToggleButton(GUI_FIELD fieldSensitivity, QWidget *parent) : QWidget(parent), m_checked(false), m_offset(0)
 {
     m_state = Unknown;
     setFixedSize(60, 30); // Set a fixed size for the toggle button
@@ -22,7 +24,7 @@ ToggleButton::ToggleButton(QString fieldSensitivity, QWidget *parent) : QWidget(
     connect(m_timer, &QTimer::timeout, this, &ToggleButton::updateAnim); // Connect the timeout signal to the update slot  
     m_timer->start(); // Start the timer
     m_loadingMovie->start();
-    MainWindow::clientManager->subscribe(fieldSensitivity.toStdString(), [this](const QString& message) {
+    MainWindow::clientManager->subscribe(fieldSensitivity, [this](const QString& message) {
         updateState(message);
     });
 

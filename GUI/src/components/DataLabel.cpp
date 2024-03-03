@@ -3,7 +3,9 @@
 #include "../Setup.h"
 #include <QFont>
 
-DataLabel::DataLabel(const QString &field, QWidget *parent) : QLabel(parent), field(field)
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
+
+DataLabel::DataLabel(const GUI_FIELD field, QWidget *parent) : QLabel(parent), field(field)
 {
     setObjectName(QString("dataLabel-%1").arg(field));
     setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -18,6 +20,6 @@ DataLabel::DataLabel(const QString &field, QWidget *parent) : QLabel(parent), fi
 
     
     setText("-");
-    MainWindow::clientManager->subscribe(field.toStdString(), [this](const QString newText){setText(newText);});
+    MainWindow::clientManager->subscribe(field, [this](const QString newText){setText(newText);});
     
 }

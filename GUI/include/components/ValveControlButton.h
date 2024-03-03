@@ -24,7 +24,7 @@ class ValveControlButton : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ValveControlButton(const QString &title, QWidget *parent = nullptr);
+    explicit ValveControlButton(GUI_FIELD valveField, QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
 

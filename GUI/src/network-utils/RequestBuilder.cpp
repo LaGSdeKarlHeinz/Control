@@ -14,6 +14,12 @@ RequestBuilder& RequestBuilder::addField(const QString& key, const QString& valu
     return *this;
 }
 
+RequestBuilder &RequestBuilder::addField(const QString &key, int value)
+{
+    m_payload[key] = value;
+    return *this;
+}
+
 RequestBuilder& RequestBuilder::addField(const QString& key, const QJsonObject& value) {
     m_payload[key] = value;
     return *this;

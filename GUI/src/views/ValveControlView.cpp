@@ -37,52 +37,52 @@ ValveControlView::ValveControlView(QWidget *parent) : QFrame(parent), background
 void ValveControlView::placeValves() {
     
     // GSE Valves
-    addButtonIcon("Toggle Button 1", 0.224152, 0.463284);
-    addButtonIcon("Toggle Button", 0.226, 0.55);
-    addButtonIcon("Toggle Button", 0.226, 0.635, ValveButton::Orientation::Horizontal);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.224152, 0.463284);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.226, 0.55);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.226, 0.635, ValveButton::Orientation::Horizontal);
 
     //Vent Valves
-    addButtonIcon("Toggle Button", 0.605, 0.3825, ValveButton::Orientation::Horizontal);
-    addButtonIcon("Toggle Button", 0.925, 0.3825, ValveButton::Orientation::Horizontal);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.605, 0.3825, ValveButton::Orientation::Horizontal);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.925, 0.3825, ValveButton::Orientation::Horizontal);
     // Pressure Valves
-    addButtonIcon("Toggle Button", 0.7025, 0.297, ValveButton::Orientation::Vertical);
-    addButtonIcon("Toggle Button", 0.8218, 0.297, ValveButton::Orientation::Vertical);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.7025, 0.297, ValveButton::Orientation::Vertical);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.8218, 0.297, ValveButton::Orientation::Vertical);
     // Engine valves
-    addButtonIcon("Toggle Button", 0.717, 0.66555, ValveButton::Orientation::Horizontal);
-    addButtonIcon("Toggle Button", 0.8072, 0.66555, ValveButton::Orientation::Horizontal);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.717, 0.66555, ValveButton::Orientation::Horizontal);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.8072, 0.66555, ValveButton::Orientation::Horizontal);
     // Active Cooling valves
-    addButtonIcon("Toggle Button", 0.6775, 0.725, ValveButton::Orientation::Vertical);
-    addButtonIcon("Toggle Button", 0.84305, 0.725, ValveButton::Orientation::Vertical);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.6775, 0.725, ValveButton::Orientation::Vertical);
+    addButtonIcon(GUI_FIELD::MAIN_FUEL, 0.84305, 0.725, ValveButton::Orientation::Vertical);
 
 }
 
-void ValveControlView::addDataLabel(const QString& field, float x, float y) {
+void ValveControlView::addDataLabel(const GUI_FIELD field, float x, float y) {
     DataLabel *label = new DataLabel(field, this);
     addComponent(label, x, y);
 }
 
 void ValveControlView::placeDataLabels() {
     //GSE top
-    addDataLabel("dataField", 0.0471464, 0.0934579);
-    addDataLabel("dataField", 0.044665, 0.190921);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.0471464, 0.0934579);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.044665, 0.190921);
     //GSE bottom
-    addDataLabel("dataField", 0.0587262, 0.546061);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.0587262, 0.546061);
 
     //N2O top pressure   
-    addDataLabel("dataField", 0.609595, 0.178905);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.609595, 0.178905);
 
     //Engine tank pressure
-    addDataLabel("dataField", 0.55335, 0.473965);
-    addDataLabel("dataField", 0.944582, 0.473965);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.55335, 0.473965);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.944582, 0.473965);
 
     // Engine left pressure 
-    addDataLabel("dataField",  0.540116, 0.785047);
-    addDataLabel("dataField", 0.540116, 0.867824);
-    addDataLabel("dataField", 0.540116, 0.94526);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE,  0.540116, 0.785047);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.540116, 0.867824);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.540116, 0.94526);
 
     // Engine right pressure
-    addDataLabel("dataField", 0.924731, 0.783712);
-    addDataLabel("dataField",0.924731, 0.87984);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE, 0.924731, 0.783712);
+    addDataLabel(GUI_FIELD::CHAMBER_PRESSURE,0.924731, 0.87984);
 
 }
 
@@ -131,11 +131,10 @@ void ValveControlView::setSvgBackground(const QString& filePath) {
     backgroundImage = std::make_unique<QPixmap>(filePath);
 }
 
-void ValveControlView::addButtonIcon(QString name ,float x, float y, ValveButton::Orientation orientation) {
+void ValveControlView::addButtonIcon(GUI_FIELD field ,float x, float y, ValveButton::Orientation orientation) {
     ValveButton *button = new ValveButton(orientation,this);
-    name = name.toLower();
-    name = name.replace(" ", "");
-    MainWindow::clientManager->subscribe(name.toStdString(), [button](const QString& message) {
+    
+    MainWindow::clientManager->subscribe(field, [button](const QString& message) {
         
         if (message == "open") {
             button->setState(ValveButton::State::Open);

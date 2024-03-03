@@ -23,7 +23,7 @@
 #include "components/ValveControlButton.h"
 #include "../Setup.h"
 
-ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std::string, std::vector<std::string>>> *controls) : QFrame(parent) {
+ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std::string, std::vector<GUI_FIELD>>> *controls) : QFrame(parent) {
     
     setStyleSheet("background:transparent;");
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -36,7 +36,7 @@ ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std:
     setupContainerWidget();
    
 
-    ValveControlButton *l = new ValveControlButton("Valve 1");
+
 
  
 
@@ -48,9 +48,9 @@ ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std:
    
     
     QHBoxLayout *containerLayout = new QHBoxLayout(controlContainerWidget);
-    QMap<std::string, std::vector<std::string>> valveControls = controls->value("ValveControlButton");
+    QMap<std::string, std::vector<GUI_FIELD>> valveControls = controls->value("ValveControlButton");
     createValveLayouts(containerLayout, &valveControls);
-    QMap<std::string, std::vector<std::string>> pushButtonControls = controls->value("QPushButton");
+    QMap<std::string, std::vector<GUI_FIELD>> pushButtonControls = controls->value("QPushButton");
     createPushButtonLayouts(containerLayout, &pushButtonControls);
     
     containerLayout->setContentsMargins(20, 10, 20, 10);
@@ -62,13 +62,13 @@ ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std:
     
 }
 
-void ControlPannelView::createValveLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<std::string>> *valves)
+void ControlPannelView::createValveLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<GUI_FIELD>> *valves)
 {
 
     for (auto it = valves->constBegin(); it != valves->constEnd(); ++it) {
         const QString &title = QString::fromStdString(it.key());
         int maxColumns = std::ceil(it.value().size() / 2.0);
-        const std::vector<std::string> &valveNames = it.value();
+        const std::vector<GUI_FIELD> &valveNames = it.value();
 
         QVBoxLayout *controlLayout = new QVBoxLayout;
         QLabel *titleLabel = new QLabel(title);
@@ -87,14 +87,14 @@ void ControlPannelView::createValveLayouts(QHBoxLayout *mainLayout, QMap<std::st
     }
 }
 
-void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<std::string>> *buttons)
+void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<std::string, std::vector<GUI_FIELD>> *buttons)
 {
     
     for (auto it = buttons->constBegin(); it != buttons->constEnd(); ++it) {
     
         const QString &title = QString::fromStdString(it.key());
-        const std::vector<std::string> &buttonNames = it.value();
-
+        const std::vector<GUI_FIELD> &buttonField = it.value();
+        
         QVBoxLayout *controlLayout = new QVBoxLayout;
         QLabel *titleLabel = new QLabel(title);
        
@@ -108,14 +108,14 @@ void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<st
         controlLayout->setSpacing(15);
         QGridLayout *gridLayout = new QGridLayout;
         gridLayout->setSpacing(25);
-        int maxColumns = std::ceil(buttonNames.size() / 2.0);
+        int maxColumns = std::ceil(buttonField.size() / 2.0);
 
         
 
 
-        for (int i = 0; i < buttonNames.size(); ++i) {
-            std::string trimmedName = buttonNames[i];
-            QPushButton *button = new QPushButton(QString::fromStdString(buttonNames[i]));
+        for (int i = 0; i < buttonField.size(); ++i) {
+            std::string trimmedName = fieldUtil::enumToFieldName(buttonField[i]).toStdString();
+            QPushButton *button = new QPushButton(fieldUtil::enumToFieldName(buttonField[i]));
             std::replace(trimmedName.begin(), trimmedName.end(), ' ', '_');
             
             button->setObjectName(QString::fromStdString(trimmedName));
@@ -156,7 +156,7 @@ void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<st
     }
 }
 
-void ControlPannelView::createValveControlButtons(QGridLayout *gridLayout, const std::vector<std::string> &strings, int maxColumns)
+void ControlPannelView::createValveControlButtons(QGridLayout *gridLayout, const std::vector<GUI_FIELD> &fields, int maxColumns)
 {
     // Clear existing items from the grid layout
     QLayoutItem *child;
@@ -173,8 +173,8 @@ void ControlPannelView::createValveControlButtons(QGridLayout *gridLayout, const
     int column = 0;
 
     // Add ValveControlButton for each string
-    for (const std::string &str : strings) {
-        ValveControlButton *button = new ValveControlButton(QString::fromStdString(str));
+    for (const GUI_FIELD &field : fields) {
+        ValveControlButton *button = new ValveControlButton(field);
         gridLayout->addWidget(button, row, column);
 
         // Move to the next row or wrap to the next column

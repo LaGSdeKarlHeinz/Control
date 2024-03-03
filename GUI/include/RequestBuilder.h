@@ -21,6 +21,7 @@ public:
     
     RequestBuilder& setHeader(RequestType type);
     RequestBuilder& addField(const QString& key, const QString& value);
+    RequestBuilder& addField(const QString& key, int value);
     RequestBuilder& addField(const QString& key, const QJsonObject& value);
     
     QJsonObject build() const;

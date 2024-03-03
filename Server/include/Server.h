@@ -18,6 +18,7 @@ public:
     Server(QObject *parent = nullptr);
     void sendToAllClients(const QByteArray &data);
     void handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len);
+    void simulateJsonData();
     
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
@@ -37,7 +38,10 @@ private:
     void openSerialPort();
     void updateSubscriptions(const QJsonObject &newData);
 
-    QMap<QString, QList<QTcpSocket *>> subscriptionMap;
+
+    
+
+    QMap<int, QList<QTcpSocket *>> subscriptionMap;
     QList<QTcpSocket *> clients;
 
     

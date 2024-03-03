@@ -44,15 +44,15 @@ QHBoxLayout* MainWindow::createSectionsLayout() {
     QFrame *rightSection = new RightView();
     
     // Instantiate a QMap with std::string keys and std::vector<std::string> values
-    QMap<std::string, std::vector<std::string>> valvesMap;
-    QMap<std::string, std::vector<std::string>> pushButtonMap;
-    QMap<std::string, QMap<std::string, std::vector<std::string>>> controlMap;
+    QMap<std::string, std::vector<GUI_FIELD>> valvesMap;
+    QMap<std::string, std::vector<GUI_FIELD>> pushButtonMap;
+    QMap<std::string, QMap<std::string, std::vector<GUI_FIELD>>> controlMap;
 
     // Populate the QMap with key-value pairs
-    valvesMap.insert("Engine Valves", {"Toggle Button 1", "test 6", "test 7", "test 8", "test 9"});
-    valvesMap.insert("GSE Valves", {"test 1", "test 2", "test 3", "test 4"});
+    valvesMap.insert("Engine Valves", {GUI_FIELD::MAIN_FUEL, GUI_FIELD::MAIN_LOX, GUI_FIELD::VENT_FUEL, GUI_FIELD::VENT_LOX, GUI_FIELD::IGNITER_LOX, GUI_FIELD::IGNITER_FUEL});
+    valvesMap.insert("GSE Valves", {GUI_FIELD::GSE_VENT});
     
-    pushButtonMap.insert("Command", {"Command 1", "Command 2", "Command 3"});
+    pushButtonMap.insert("Command", {GUI_FIELD::CMD_1,GUI_FIELD::CMD_2, GUI_FIELD::CMD_3});
     controlMap.insert("ValveControlButton", valvesMap);
     controlMap.insert("QPushButton", pushButtonMap);
 

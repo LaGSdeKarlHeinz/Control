@@ -5,6 +5,8 @@
 #include <QMovie>
 #include <QTimer>
 
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
+
 enum State { Open, Close, Unknown };
 
 
@@ -13,7 +15,7 @@ class ToggleButton : public QWidget
     Q_PROPERTY(qreal offset READ offset WRITE setOffset)
     Q_OBJECT
 public:
-    explicit ToggleButton(QString fieldSensitivity,QWidget *parent = nullptr);
+    explicit ToggleButton(GUI_FIELD fieldSensitivity,QWidget *parent = nullptr);
 
     QSize sizeHint() const override;
 

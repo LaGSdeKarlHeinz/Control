@@ -15,9 +15,7 @@
 #include <QJsonObject>
 #include <QtNetwork/QTcpSocket>
 
-
-
-
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
 #include "ClientInterface.h"
 
 class ClientManager: public ClientInterface {
@@ -26,8 +24,8 @@ public:
 
     ClientManager(QObject *parent = nullptr);
 
-    void subscribe(const std::string& field, CallbackFunction<QString> callback) override;
-    void subscribe(const std::string& field, CallbackFunction<QJsonValue> callback) override;
+    void subscribe(const GUI_FIELD field, CallbackFunction<QString> callback) override;
+    void subscribe(const GUI_FIELD field, CallbackFunction<QJsonValue> callback) override;
     void handleReceivedData(const QString& data) override;
     void send(const QString& data) override;
     void sendSubscribeRequest(const QString& field);
@@ -44,10 +42,11 @@ private slots:
          std::cout << "Disconnected from the server" << std::endl;
     }
 
+    void sendSubscribeRequest(const GUI_FIELD field);
 
 private:
-    QMap<std::string, QVector<CallbackFunction<QString>>> subscriptionsStrings;
-    QMap<std::string, QVector<CallbackFunction<QJsonValue>>> subscriptionsJson;
+    QMap<GUI_FIELD, QVector<CallbackFunction<QString>>> subscriptionsStrings;
+    QMap<GUI_FIELD, QVector<CallbackFunction<QJsonValue>>> subscriptionsJson;
 
     bool p = false;
     QTcpSocket *socket;

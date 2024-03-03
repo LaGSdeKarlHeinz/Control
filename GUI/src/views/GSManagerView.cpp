@@ -115,8 +115,8 @@ void GSManagerView::setInfoChildrenStyle(QFrame *child, int fontSize, bool isBol
 void GSManagerView::setupTimersSection() {
 
 
-    timerViewAV = new TimerView("AV");
-    timerViewGSE = new TimerView("GSE");
+    timerViewAV = new TimerView("AV", GUI_FIELD::AV_TIMER);
+    timerViewGSE = new TimerView("GSE",GUI_FIELD::GSE_TIMER);
     // layout->addWidget(label_timers.get(), 1);
     QWidget *internalStucture = new QWidget();
     QHBoxLayout *innerLayout = new QHBoxLayout(internalStucture);
@@ -147,8 +147,8 @@ void GSManagerView::setupTimersSection() {
 }
 
 void GSManagerView::setupConnections() {
-    MainWindow::clientManager->subscribe("test1234", setDownRange);
-    MainWindow::clientManager->subscribe("chamber_pressure", setPacketNumber);
+    MainWindow::clientManager->subscribe(GUI_FIELD::DOWNRANGE, setDownRange);
+    MainWindow::clientManager->subscribe(GUI_FIELD::PACKET_NBR, setPacketNumber);
     
 }
 

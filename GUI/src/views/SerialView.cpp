@@ -72,8 +72,8 @@ void SerialView::setupStyle() {
 
 void SerialView::setupConnections() {
     connect(openButton, &QPushButton::clicked, this, &SerialView::buttonClicked);
-    MainWindow::clientManager->subscribe("serialStatus", setSerialStatus);
-    MainWindow::clientManager->subscribe("serialNameUsed", setSerialName);
+    MainWindow::clientManager->subscribe(GUI_FIELD::SERIAL_STATUS, setSerialStatus);
+    MainWindow::clientManager->subscribe(GUI_FIELD::SERIAL_NAME_USE, setSerialName);
     MainWindow::clientManager->send("getSerialStatus");
 }
 

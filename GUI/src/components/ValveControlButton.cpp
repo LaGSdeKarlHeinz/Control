@@ -77,23 +77,21 @@ void CLickableIcon::resetStyle() {
         )"));
 }
 
-ValveControlButton::ValveControlButton(const QString &title, QWidget *parent) : QWidget(parent)
+ValveControlButton::ValveControlButton(GUI_FIELD valveField, QWidget *parent) : QWidget(parent)
 {
     setStyleSheet("background: transparent;");
     
     // Create the title label
-    QLabel *titleLabel = new QLabel(title, this);
+    QLabel *titleLabel = new QLabel(fieldUtil::enumToFieldName(valveField), this);
     titleLabel->setAlignment(Qt::AlignLeft);
     titleLabel->setStyleSheet(QString("color:%1").arg(col::primary));
     QFont font = titleLabel->font();
     font.setPointSize(10);
     font.setBold(true);
     titleLabel->setFont(font);
-    QString str = title;
-    str = str.remove(' ');
-    str = str.toLower();
     
-    toggleButton = new ToggleButton(str, this);
+    
+    toggleButton = new ToggleButton(valveField, this);
     refreshLabel = new CLickableIcon(":/icons/refresh-icon.png", this);
 
 
