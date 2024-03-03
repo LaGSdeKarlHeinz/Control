@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up CMake
+      uses: lukka/get-cmake@v1
+
+    - name: Configure and build project
+      run: |
+        cmake -S . -B build
+        cmake --build build --config Release
+
+    - name: Run tests
+      run: |
+        cd build
+        ./tests/my_tests > test_results.txt
+
+    - name: Append test results to README
+      run: |
+        echo '\nTest results:' >> README.md
+        cat test_results.txt >> README.md
