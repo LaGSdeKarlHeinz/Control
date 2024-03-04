@@ -1,4 +1,4 @@
-![Tests](https://github.com/LaGSdeKarlHeinz/Control/actions/workflows/main.yml/badge.svg)
+
 <p align="center">
     <img width="200" src="https://github.com/LaGSdeKarlHeinz/Control/actions/workflows/main.yml/badge.svg" alt="Test bage">
 </p>
