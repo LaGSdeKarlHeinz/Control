@@ -44,7 +44,7 @@ void ClientManager::readyRead() {
         // Handle incoming data from the server
         
         QByteArray data = socket->readAll();
-        std::cout << "Received data: " << data.toStdString() << std::endl;
+        //std::cout << "Received data: " << data.toStdString() << std::endl;
         handleReceivedData(QString::fromUtf8(data));
     }
 
@@ -97,6 +97,10 @@ void ClientManager::handleReceivedData(const QString& data) {
 
     // Split the string by '}{'
     QStringList jsonStrings = jsonString.split("}{");
+    if (jsonStrings.size() == 1) {
+        // If there's only one JSON string, it's the only one to process
+        jsonStrings = jsonString.split("}\n{");
+    }
 
     // Process each individual JSON string
     for (const QString &jsonStr : jsonStrings) {
@@ -110,6 +114,8 @@ void ClientManager::handleReceivedData(const QString& data) {
         QJsonParseError error;
         QJsonDocument jsonDoc = QJsonDocument::fromJson(json.toUtf8(), &error);
         if (error.error != QJsonParseError::NoError) {
+            std::cout << json.toStdString() << std::endl;
+            std::cout << jsonStrings.size() << std::endl;
             qWarning() << "Error parsing JSON:" << error.errorString();
             continue;
         }
