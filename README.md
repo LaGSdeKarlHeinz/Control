@@ -1,5 +1,7 @@
-![example workflow](https://github.com/LaGSdeKarlHeinz/Control/actions/workflows/main.yml/badge.svg)
 
+<p align="center">
+![example workflow](https://github.com/LaGSdeKarlHeinz/Control/actions/workflows/main.yml/badge.svg)
+</p>
 # Concept network 
 
 fonctionnement server - client, avec des socket 
