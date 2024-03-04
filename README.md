@@ -62,3 +62,12 @@ communication from sever to client :
 ```
 get :                                        
     getSerialStatus => response = "serialNameUsed", "serialStatus" (fields expected)
+
+
+# TODO
+
+- Server respond and make command from clients
+- Stress tests
+- authentication
+- multiple concurrent input handler
+- AV data pannels
