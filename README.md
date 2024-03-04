@@ -1,6 +1,6 @@
-
-<p align="center">
 ![example workflow](https://github.com/LaGSdeKarlHeinz/Control/actions/workflows/main.yml/badge.svg)
+<p align="center">
+    <img width="200" src="https://github.com/LaGSdeKarlHeinz/Control/actions/workflows/main.yml/badge.svg" alt="Material Bread logo">
 </p>
 # Concept network 
 
