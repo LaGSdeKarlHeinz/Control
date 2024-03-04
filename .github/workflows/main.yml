@@ -40,12 +40,6 @@ jobs:
         cd build
         ./tests/my_tests > test_results.txt
 
-    - name: Append test results to README
-      run: |
-        echo '\nTest results:' >> README.md
-        cat build/test_results.txt >> README.md
-
-
     - name: Commit and push changes
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
