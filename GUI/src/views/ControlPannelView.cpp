@@ -22,6 +22,8 @@
 #include "components/ToggleButton.h"
 #include "components/ValveControlButton.h"
 #include "../Setup.h"
+#include "MainWindow.h"
+#include "RequestBuilder.h"
 
 ControlPannelView::ControlPannelView(QWidget *parent,QMap<std::string, QMap<std::string, std::vector<GUI_FIELD>>> *controls) : QFrame(parent) {
     
@@ -142,6 +144,15 @@ void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<st
                 .arg(col::primary)
                 .arg(QString::fromStdString(trimmedName));
 
+            QObject::connect(button, &QPushButton::clicked, [button]() {
+                // printf("fdsf");
+                RequestBuilder b;
+                b.setHeader(RequestType::POST);
+                b.addField("cmd", button->text());
+                MainWindow::clientManager->send(b.toString());
+            });
+
+            
             button->setFixedHeight(40);
             button->setStyleSheet(style);
             gridLayout->addWidget(button, i / maxColumns, i % maxColumns);
@@ -154,6 +165,12 @@ void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<st
         mainLayout->addLayout(controlLayout, Qt::AlignBottom);
         // mainLayout->addWidget(w, Qt::AlignTop);
     }
+}
+
+
+void ControlPannelView::buttonClickedCallback(const std::string& command) {
+    printf("commad");
+    
 }
 
 void ControlPannelView::createValveControlButtons(QGridLayout *gridLayout, const std::vector<GUI_FIELD> &fields, int maxColumns)

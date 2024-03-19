@@ -3,6 +3,9 @@
 #include "ClientManager.h"
 #include <string>
 #include <QJsonDocument>
+#include <QMap>
+#include <QString>
+#include <QJsonObject>
 
 
 #include "../Capsule/src/capsule.h"
@@ -106,10 +109,12 @@ void Server::receiveGet(const QJsonObject &request,  QTcpSocket *senderSocket) {
 void Server::receivePost(const QJsonObject &request,  QTcpSocket *senderSocket) {
     // Handle the post request
     std::cout << "Received post request" << std::endl;
-    QString field = request["field"].toString();
-    QString value = request["value"].toString();
-    QByteArray data = "Data for " + field.toUtf8() + " updated to " + value.toUtf8();
-    sendToAllClients(data);
+    QJsonDocument doc(request);
+    QString strJson(doc.toJson(QJsonDocument::Compact));
+    if (request["payload"].toObject().contains("cmd")) {
+
+    }
+    std::cout << strJson.toStdString() << std::endl;
 }
 
 void Server::readyRead() {
@@ -216,9 +221,13 @@ void Server::updateSubscriptions(const QJsonObject &newData) {
 
 }
 
-#include <QMap>
-#include <QString>
-#include <QJsonObject>
+void Server::sendSerialPacket(uint8_t packetId, uint8_t *packet, uint32_t size) {
+    uint8_t *packetToSend = capsule.encode(packetId, packet, size);
+    serialPort->write((char *) packetToSend,capsule.getCodedLen(size));
+    delete[] packetToSend;
+}
+
+
 
 void Server::handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len) {
     //    packet_ctr++;

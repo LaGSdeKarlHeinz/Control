@@ -37,7 +37,7 @@ private:
     void serialError();
     void openSerialPort();
     void updateSubscriptions(const QJsonObject &newData);
-
+    void sendSerialPacket(uint8_t packetId, uint8_t *packet, uint32_t size);
 
     
 

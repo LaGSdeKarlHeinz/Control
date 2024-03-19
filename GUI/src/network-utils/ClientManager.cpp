@@ -88,8 +88,27 @@ void ClientManager::subscribe(const GUI_FIELD field, CallbackFunction<QJsonValue
     socket->write(builder.toString().toUtf8());
     socket->waitForBytesWritten();
     socket->flush();
+    
     }
 
+
+QString removeExtraCurlyBrackets(const QString& jsonString) {
+    QString sanitizedString = jsonString.trimmed();
+    
+    // Remove leading extra curly brackets
+    while (sanitizedString.startsWith('{')) {
+        sanitizedString.remove(0, 1);
+        sanitizedString = sanitizedString.trimmed();
+    }
+    
+    // Remove trailing extra curly brackets
+    while (sanitizedString.endsWith('}')) {
+        sanitizedString.chop(1);
+        sanitizedString = sanitizedString.trimmed();
+    }
+    
+    return sanitizedString;
+}
 
 void ClientManager::handleReceivedData(const QString& data) {
     
@@ -100,13 +119,23 @@ void ClientManager::handleReceivedData(const QString& data) {
     if (jsonStrings.size() == 1) {
         // If there's only one JSON string, it's the only one to process
         jsonStrings = jsonString.split("}\n{");
+    } else {
+        std::cout << "Multiple JSON strings received" << std::endl;
+        std::cout << data.toStdString() << std::endl;
     }
 
     // Process each individual JSON string
     for (const QString &jsonStr : jsonStrings) {
         // Add '}' to the end of each string if it's not the last one
         QString json = jsonStr;
+        
+        json = removeExtraCurlyBrackets(json);
+        if (json != jsonStrings.first()) {
+            json.prepend("{");
+        }
+
         if (json != jsonStrings.last()) {
+            json.append("}");
             json.append("}");
         }
 
@@ -178,14 +207,16 @@ void ClientManager::send(const QString& data) {
         std::cout << "internal" << std::endl;
         handleReceivedData(data);
     } else {
+            
+
         QString con = QString(R"({
             "header": "subscribe",
             "payload":{
                 "field": 27
             }
         })");
-        // socket->write(con.toUtf8());
-        // socket->waitForBytesWritten();
+        socket->write(data.toUtf8());
+        socket->waitForBytesWritten();
         QString con2 = QString(R"({
             "header": "unsubscribe",
             "payload":{

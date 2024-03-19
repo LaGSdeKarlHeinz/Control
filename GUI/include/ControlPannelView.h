@@ -22,6 +22,8 @@ public:
     ControlPannelView(QWidget *parent = nullptr, QMap<std::string, QMap<std::string, std::vector<GUI_FIELD>>> *controls = nullptr);
     void resizeWidget();
     virtual ~ControlPannelView() {};
+    void buttonClickedCallback(const std::string& command);
+
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
