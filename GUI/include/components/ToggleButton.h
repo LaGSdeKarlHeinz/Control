@@ -46,6 +46,7 @@ private:
     void setOffset(qreal offsetValue);
     void updateAnim();
     QMovie *m_loadingMovie;
+    GUI_FIELD m_fieldSensitivity;
 };
 
 #endif // TOGGLEBUTTON_H

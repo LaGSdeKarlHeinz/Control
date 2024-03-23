@@ -10,6 +10,7 @@
 
 #include "../Capsule/src/capsule.h"
 #include "../ERT_RF_Protocol_Interface/PacketDefinition.h"
+#include "RequestAdapter.h"
 
 
 
@@ -112,7 +113,12 @@ void Server::receivePost(const QJsonObject &request,  QTcpSocket *senderSocket) 
     QJsonDocument doc(request);
     QString strJson(doc.toJson(QJsonDocument::Compact));
     if (request["payload"].toObject().contains("cmd")) {
-
+        handleCommand(request);
+        int f = request["payload"].toObject()["cmd"].toInt();
+        int order = request["payload"].toObject()["cmd_order"].toInt();
+        std::cout << "cmd: " << f << " order: " << order << std::endl;
+        av_uplink_t p = createUplinkPacketFromRequest((GUI_FIELD)f, order);
+        sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
     }
     std::cout << strJson.toStdString() << std::endl;
 }
@@ -134,21 +140,6 @@ void Server::readyRead() {
             
         }
 
-        // Process the received data as needed
-        // std::cout << "Received data: " << dataString.toStdString() << std::endl;
-        // QString d = QString(R"(
-        // {
-        //     "header": "post",
-        //     "payload": {
-        //         "%1": "new data from server"
-        //     }
-        // }
-        // )").arg("data");
-        
-        // for (QTcpSocket *subscribedSocket : subscriptionMap[0]) {
-         
-        //     subscribedSocket->write(d.toUtf8());
-        // }
     }
 }
 
@@ -221,10 +212,39 @@ void Server::updateSubscriptions(const QJsonObject &newData) {
 
 }
 
+void Server::handleCommand(const QJsonObject &command) {
+    // Handle the command
+    int f = command["payload"].toObject()["cmd"].toInt();
+    RequestBuilder b = RequestBuilder();
+    switch (f)
+    {
+    case GUI_FIELD::SERIAL_STATUS:
+        b.setHeader(RequestType::POST);
+        b.addField(QString::number(GUI_FIELD::SERIAL_STATUS), serialPort->isOpen() ? "open" : "close");
+        updateSubscriptions(b.build());
+        break;
+    
+    case GUI_FIELD::SERIAL_NAME_USE:
+        b.setHeader(RequestType::POST);
+        b.addField(QString::number(GUI_FIELD::SERIAL_NAME_USE), serialPort->portName());
+        updateSubscriptions(b.build());
+        break;
+
+    default:
+        int order = command["payload"].toObject()["cmd_order"].toInt();
+        std::cout << "cmd: " << f << " order: " << order << std::endl;
+        av_uplink_t p = createUplinkPacketFromRequest((GUI_FIELD)f, order);
+        sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
+        break;
+    }
+    
+}
+
 void Server::sendSerialPacket(uint8_t packetId, uint8_t *packet, uint32_t size) {
     uint8_t *packetToSend = capsule.encode(packetId, packet, size);
     serialPort->write((char *) packetToSend,capsule.getCodedLen(size));
     delete[] packetToSend;
+    std::cout << "Packet sent to radio Board" << std::endl;
 }
 
 
@@ -305,6 +325,7 @@ void Server::handleSerialPacket(uint8_t packetId, uint8_t *dataIn, uint32_t len)
             break;
     }        
 }
+
 
 
 

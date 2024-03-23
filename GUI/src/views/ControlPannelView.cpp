@@ -149,6 +149,7 @@ void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<st
                 RequestBuilder b;
                 b.setHeader(RequestType::POST);
                 b.addField("cmd", button->text());
+                b.addField("cmd_order", "1");
                 MainWindow::clientManager->send(b.toString());
             });
 
@@ -169,7 +170,7 @@ void ControlPannelView::createPushButtonLayouts(QHBoxLayout *mainLayout, QMap<st
 
 
 void ControlPannelView::buttonClickedCallback(const std::string& command) {
-    printf("commad");
+    printf("command");
     
 }
 

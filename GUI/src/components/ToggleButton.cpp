@@ -8,9 +8,10 @@
 #include <QtConcurrent>
 #include <MainWindow.h>
 
+#include <RequestBuilder.h>
 #include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
 
-ToggleButton::ToggleButton(GUI_FIELD fieldSensitivity, QWidget *parent) : QWidget(parent), m_checked(false), m_offset(0)
+ToggleButton::ToggleButton(GUI_FIELD fieldSensitivity, QWidget *parent) : QWidget(parent), m_checked(false), m_offset(0), m_fieldSensitivity(fieldSensitivity)
 {
     m_state = Unknown;
     setFixedSize(60, 30); // Set a fixed size for the toggle button
@@ -31,7 +32,14 @@ ToggleButton::ToggleButton(GUI_FIELD fieldSensitivity, QWidget *parent) : QWidge
     connect(this, &ToggleButton::toggled, this, [this](bool checked) {
           // MainWindow::clientManager->send("command");
           // QtConcurrent::run([this](const QString& commande){MainWindow::clientManager->send("command");}, "command");
-          std::thread([=]() { MainWindow::clientManager->send("command");   }).detach();
+          std::thread([this]() { 
+            RequestBuilder b = RequestBuilder();
+            b.setHeader(RequestType::POST);
+            b.addField("cmd", m_fieldSensitivity);
+            b.addField("cmd_order", m_checked ? 1 : 0);
+            MainWindow::clientManager->send(b.toString());   
+
+          }).detach();
     }); 
 }
 

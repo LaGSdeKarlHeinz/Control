@@ -13,7 +13,8 @@ add_library(CapsuleLib Capsule/src/capsule.h)
 
 set(SOURCES_SERVER
     src/server.cpp
-    src/main.cpp    
+    src/main.cpp
+    src/RequestAdapter.cpp
     src/network/RequestHandler.cpp
     ../GUI/src/network-utils/ClientManager.cpp
     ../GUI/src/network-utils/RequestBuilder.cpp
@@ -22,6 +23,7 @@ set(SOURCES_SERVER
 set(HEADERS_SERVER
     include/Server.h 
     include/RequestHandler.h
+    include/RequestAdapter.h
     ../GUI/include/ClientInterface.h
     ../GUI/include/ClientManager.h
     ../GUI/include/RequestBuilder.h 
@@ -37,5 +39,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
                         Qt6::Core
                         Qt6::Network
                         Qt6::SerialPort
-                        
                         )

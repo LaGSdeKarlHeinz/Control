@@ -1,5 +1,6 @@
 #include "SerialView.h"
 #include "MainWindow.h"
+#include "RequestBuilder.h"
 #include "../Setup.h"
 
 SerialView::SerialView(std::unique_ptr<QWidget> parent) : QFrame(parent.get()) {
@@ -30,13 +31,17 @@ SerialView::SerialView(std::unique_ptr<QWidget> parent) : QFrame(parent.get()) {
 }
 
 void SerialView::buttonClicked() {
+    RequestBuilder b;
+    b.setHeader(RequestType::POST);
+    b.addField("cmd", GUI_FIELD::SERIAL_STATUS);
     if (isOpen) {
-        MainWindow::clientManager->send("closeSerial");
+        b.addField("cmd_order", "close");
+        MainWindow::clientManager->send(b.toString());
         
         return;
     } 
-
-    MainWindow::clientManager->send("openSerial");
+    b.addField("cmd_order", "close");
+    MainWindow::clientManager->send(b.toString());
     
     
 }
@@ -74,7 +79,10 @@ void SerialView::setupConnections() {
     connect(openButton, &QPushButton::clicked, this, &SerialView::buttonClicked);
     MainWindow::clientManager->subscribe(GUI_FIELD::SERIAL_STATUS, setSerialStatus);
     MainWindow::clientManager->subscribe(GUI_FIELD::SERIAL_NAME_USE, setSerialName);
-    MainWindow::clientManager->send("getSerialStatus");
+    RequestBuilder b;
+    b.setHeader(RequestType::POST);
+    b.addField("cmd", GUI_FIELD::SERIAL_NAME_USE);
+    MainWindow::clientManager->send(b.toString());
 }
 
 void SerialView::changeButtonStyle(bool targetStatus) {
