@@ -114,11 +114,13 @@ void Server::receivePost(const QJsonObject &request,  QTcpSocket *senderSocket) 
     QString strJson(doc.toJson(QJsonDocument::Compact));
     if (request["payload"].toObject().contains("cmd")) {
         handleCommand(request);
+        /*
         int f = request["payload"].toObject()["cmd"].toInt();
         int order = request["payload"].toObject()["cmd_order"].toInt();
         std::cout << "cmd: " << f << " order: " << order << std::endl;
         av_uplink_t p = createUplinkPacketFromRequest((GUI_FIELD)f, order);
         sendSerialPacket(CAPSULE_ID::GS_CMD, (uint8_t*) &p, av_uplink_size);
+        */
     }
     std::cout << strJson.toStdString() << std::endl;
 }
@@ -218,17 +220,31 @@ void Server::handleCommand(const QJsonObject &command) {
     RequestBuilder b = RequestBuilder();
     switch (f)
     {
+
+    case GUI_FIELD::GUI_CMD_SET_SERIAL_STATUS:
+        if (command["payload"].toObject()["cmd_order"].toString() == "close") {
+            if (serialPort->isOpen()) {
+                serialPort->close();
+            }
+        } else {
+            openSerialPort();
+        }
     case GUI_FIELD::SERIAL_STATUS:
+        std::cout << "Serial status" << std::endl;
         b.setHeader(RequestType::POST);
         b.addField(QString::number(GUI_FIELD::SERIAL_STATUS), serialPort->isOpen() ? "open" : "close");
+        std::cout << b.toString().toStdString() << std::endl;
         updateSubscriptions(b.build());
         break;
     
+
     case GUI_FIELD::SERIAL_NAME_USE:
         b.setHeader(RequestType::POST);
         b.addField(QString::number(GUI_FIELD::SERIAL_NAME_USE), serialPort->portName());
         updateSubscriptions(b.build());
         break;
+
+        
 
     default:
         int order = command["payload"].toObject()["cmd_order"].toInt();

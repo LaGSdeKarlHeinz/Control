@@ -19,6 +19,7 @@
 #include "components/DraggableButton.h"
 #include "components/DataLabel.h"
 #include "MainWindow.h"
+#include "RequestBuilder.h"
 
 
 
@@ -145,12 +146,24 @@ void ValveControlView::addButtonIcon(GUI_FIELD field ,float x, float y, ValveBut
         }
     });
 
-    connect(button, &ValveButton::clicked, [button]() {
-        if (button->getState() == ValveButton::State::Close) {
-            std::thread([=]() { MainWindow::clientManager->send("command");   }).detach();
-        } else {
-            std::thread([=]() { MainWindow::clientManager->send("command");   }).detach();
-        }
+    connect(button, &ValveButton::clicked, [button, field]() {
+        RequestBuilder b;
+        b.setHeader(RequestType::POST);
+        b.addField("cmd",field);
+        b.addField("cmd_order", button->getState() == ValveButton::State::Close ? "open" : "close");
+        MainWindow::clientManager->send(b.toString());
+        b.clear();
+        b.setHeader(RequestType::INTERNAL);
+        b.addField(QString::number(field), "unkown");
+        MainWindow::clientManager->send(b.toString());
+        std::cout << "Send internal" << std::endl;
+
+
+        /*
+        std::thread([&b]() {      
+                MainWindow::clientManager->send(b.toString());   
+                }).detach();
+                */
     });
     addComponent(button, x, y);
  

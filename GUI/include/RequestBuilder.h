@@ -24,6 +24,8 @@ public:
     RequestBuilder& addField(const QString& key, int value);
     RequestBuilder& addField(const QString& key, const QJsonObject& value);
     
+    void clear();
+
     QJsonObject build() const;
     QString toString() const;
     

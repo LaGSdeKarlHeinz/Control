@@ -203,52 +203,14 @@ void ClientManager::notifyChildrenFields(const QJsonObject& localObject) {
 void ClientManager::send(const QString& data) {
     // send command "serialNameUsed", "serialStatus" 
     QJsonObject json = jsonFromString(data);
-    if (json.value("header") == "internal") {
+    std::cout << "Sending data: " << json.value("header").toString().toStdString() << std::endl;
+    if (json.value("header").toString() == "internal") {
         std::cout << "internal" << std::endl;
         handleReceivedData(data);
     } else {
-            
-
-        QString con = QString(R"({
-            "header": "subscribe",
-            "payload":{
-                "field": 27
-            }
-        })");
         socket->write(data.toUtf8());
         socket->waitForBytesWritten();
-        QString con2 = QString(R"({
-            "header": "unsubscribe",
-            "payload":{
-                "field": "27"
-            }
-        })");
-        // socket->write(con2.toUtf8());
     }
     
-    handleReceivedData(QString(R"({
-            "header": "unsubscribe",
-            "payload":{
-                "3": "unknown",
-                "40": "unknown"
-             }
-        })"));
-    
-    if (p) {
-            handleReceivedData(QString(R"({
-            "header": "unsubscribe",
-            "payload":{
-                "3": "open"
-            }
-        })"));
-    } else {
-        handleReceivedData(QString(R"({
-            "header": "unsubscribe",
-            "payload":{
-                "3": "close"
-            }
-        })"));
-    }
-    p = !p;
     
 }

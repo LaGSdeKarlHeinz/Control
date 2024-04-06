@@ -51,3 +51,7 @@ QJsonObject RequestBuilder::build() const {
 QString RequestBuilder::toString() const {
     return QString(QJsonDocument(build()).toJson());
 }
+
+void RequestBuilder::clear() {
+    m_payload = QJsonObject();
+}

@@ -78,7 +78,7 @@ void GSManagerView::setupInfoSection() {
 
     QLabel *downRangeLabel = new QLabel("Downrange");
     setInfoChildrenStyle(downRangeLabel, 15, true);
-   
+    
     QLabel *packetNumberLabel = new QLabel("Packet Number");
     setInfoChildrenStyle(packetNumberLabel, 15, true);
     

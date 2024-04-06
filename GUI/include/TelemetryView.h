@@ -10,16 +10,22 @@
 #include <memory>
 
 #include <QLabel>
+#include <QVBoxLayout>
+
+#include "../../Server/ERT_RF_Protocol_Interface/PacketDefinition.h"
 
 class TelemetryView : public QFrame {
     Q_OBJECT
 
 public:
-    TelemetryView(std::unique_ptr<QWidget> parent = nullptr);
+    TelemetryView(QWidget* parent = nullptr);
     
     virtual ~TelemetryView() {};
 
 private:
+    void addField(GUI_FIELD f);
+    QVBoxLayout* layout;
+
     std::unique_ptr<QLabel> altitudeLabel;
 };
 

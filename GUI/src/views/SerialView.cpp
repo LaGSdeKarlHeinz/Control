@@ -33,14 +33,14 @@ SerialView::SerialView(std::unique_ptr<QWidget> parent) : QFrame(parent.get()) {
 void SerialView::buttonClicked() {
     RequestBuilder b;
     b.setHeader(RequestType::POST);
-    b.addField("cmd", GUI_FIELD::SERIAL_STATUS);
+    b.addField("cmd", GUI_FIELD::GUI_CMD_SET_SERIAL_STATUS);
     if (isOpen) {
         b.addField("cmd_order", "close");
         MainWindow::clientManager->send(b.toString());
         
         return;
     } 
-    b.addField("cmd_order", "close");
+    b.addField("cmd_order", "open");
     MainWindow::clientManager->send(b.toString());
     
     
@@ -76,13 +76,23 @@ void SerialView::setupStyle() {
 
 
 void SerialView::setupConnections() {
+    
     connect(openButton, &QPushButton::clicked, this, &SerialView::buttonClicked);
+
     MainWindow::clientManager->subscribe(GUI_FIELD::SERIAL_STATUS, setSerialStatus);
     MainWindow::clientManager->subscribe(GUI_FIELD::SERIAL_NAME_USE, setSerialName);
+
     RequestBuilder b;
     b.setHeader(RequestType::POST);
     b.addField("cmd", GUI_FIELD::SERIAL_NAME_USE);
     MainWindow::clientManager->send(b.toString());
+
+    b.clear();
+    b.setHeader(RequestType::POST);
+    b.addField("cmd", GUI_FIELD::SERIAL_STATUS);
+    MainWindow::clientManager->send(b.toString());
+
+    
 }
 
 void SerialView::changeButtonStyle(bool targetStatus) {
@@ -94,6 +104,7 @@ void SerialView::changeButtonStyle(bool targetStatus) {
 }
 
 void SerialView::updateStatus(QString newStatus) {
+    std::cout << "new status : " << newStatus.toStdString() << std::endl;
     if (newStatus == "open") {
         isOpen = true;
         statusLed->setStyleSheet(ledGreenStyle);
