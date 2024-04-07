@@ -23,7 +23,8 @@ public:
     virtual ~TelemetryView() {};
 
 private:
-    void addField(GUI_FIELD f);
+    void addField(GUI_FIELD f, QLayout* layout);
+    void createSection(QString title, QList<GUI_FIELD> *fields);
     QVBoxLayout* layout;
 
     std::unique_ptr<QLabel> altitudeLabel;

@@ -233,7 +233,7 @@ void Server::handleCommand(const QJsonObject &command) {
         std::cout << "Serial status" << std::endl;
         b.setHeader(RequestType::POST);
         b.addField(QString::number(GUI_FIELD::SERIAL_STATUS), serialPort->isOpen() ? "open" : "close");
-        std::cout << b.toString().toStdString() << std::endl;
+        std::cout << b.toString().toStdString() << std::endl;   
         updateSubscriptions(b.build());
         break;
     

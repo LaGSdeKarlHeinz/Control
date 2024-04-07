@@ -203,7 +203,6 @@ void ClientManager::notifyChildrenFields(const QJsonObject& localObject) {
 void ClientManager::send(const QString& data) {
     // send command "serialNameUsed", "serialStatus" 
     QJsonObject json = jsonFromString(data);
-    std::cout << "Sending data: " << json.value("header").toString().toStdString() << std::endl;
     if (json.value("header").toString() == "internal") {
         std::cout << "internal" << std::endl;
         handleReceivedData(data);
@@ -211,6 +210,4 @@ void ClientManager::send(const QString& data) {
         socket->write(data.toUtf8());
         socket->waitForBytesWritten();
     }
-    
-    
 }

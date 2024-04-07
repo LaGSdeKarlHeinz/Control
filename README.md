@@ -70,5 +70,6 @@ get :
 - Stress tests
 - authentication
 - multiple concurrent input handler
-- AV data pannels
 - separate data handling in a different thread  
+
+- Mettre le AV data pannels sur des cards 
