@@ -1,9 +1,7 @@
-[submodule "ERT_RF_Protocol_Interface"]
-	path = ERT_RF_Protocol_Interface
-	url = https://github.com/EPFLRocketTeam/ERT_RF_Protocol_Interface
-[submodule "Capsule"]
-	path = Capsule
+[submodule "Server/Capsule"]
+	path = Server/Capsule
 	url = https://github.com/YohanHadji/Capsule.git
-[submodule "XRF_interface"]
-	path = XRF_interface
-	url = https://github.com/MorgesHAB/XRF_interface.git
+[submodule "Server/ERT_RF_Protocol_Interface"]
+	path = Server/ERT_RF_Protocol_Interface
+	url = https://github.com/EPFLRocketTeam/ERT_RF_Protocol_Interface.git
+	branch = main

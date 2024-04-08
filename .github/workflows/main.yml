@@ -1,0 +1,50 @@
+name: Automatic Tests
+
+on:
+  push:
+    branches:
+      - firehorn/dev/maxime
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install Qt6 dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y qt6-base-dev-tools qt6-base-dev libqt6svg6-dev libqt5serialport5-dev libgtest-dev
+
+    - name: Install CMake
+      run: |
+        sudo apt-get install -y cmake
+
+    - name: Initialize submodules
+      run: git submodule update --init --recursive
+
+
+    - name: Configure and build project
+      run: |
+        cmake -S GUI -B build
+        cmake --build build 
+
+    - name: Run tests
+      run: |
+        cd build
+        ./tests/my_tests > test_results.txt
+
+    - name: Commit and push changes
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Automatically update README"
+
+        
+    - name: Debug README.md contents
+      run: cat README.md

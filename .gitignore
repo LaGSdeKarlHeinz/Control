@@ -33,3 +33,12 @@
 
 
 /build
+=======
+# compiled resources file
+*.rcc
+
+build
+/GUI/build
+/Servers/build
+/.vscode
+/GUI/Log/

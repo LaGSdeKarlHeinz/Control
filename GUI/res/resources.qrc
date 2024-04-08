@@ -1,0 +1,19 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>gif/loading.gif</file>
+        <file>icons/clock-icon-white.png</file>
+        <file>icons/clock-icon-black.png</file>
+        <file>icons/up-arrow.png</file>
+        <file>icons/refresh-icon.png</file>
+        <file>images/GS-valve-close.svg</file>
+        <file>images/GS-valve-open.svg</file>
+        <file>images/GS-valve-unknown.svg</file>
+        <file>images/prop-diagram-firehorn.png</file>
+        <file>images/prop-diagram-firehorn-highres.png</file>
+        <file>images/prop-diagram-firehorn.svg</file>
+        <file>images/prop-diagram-firehorn-dark.svg</file>
+        <file>images/prop-diagram-firehorn-light.svg</file>
+        <file>images/prop-diagram-firehorn-disconnect.png</file>
+    </qresource>
+</RCC>
